@@ -1,0 +1,269 @@
+Executive:
+  background: /mnt/data/retail_sales_project/powerbi/layouts/01_Executive_Layout.png
+  components:
+  - type: card
+    measure: '[Sales]'
+    x: 20
+    y: 630
+    w: 240
+    h: 70
+  - type: card
+    measure: '[GM %]'
+    x: 270
+    y: 630
+    w: 180
+    h: 70
+  - type: card
+    measure: '[Units]'
+    x: 460
+    y: 630
+    w: 180
+    h: 70
+  - type: card
+    measure: '[AOV]'
+    x: 650
+    y: 630
+    w: 180
+    h: 70
+  - type: card
+    measure: '[YoY %]'
+    x: 840
+    y: 630
+    w: 180
+    h: 70
+  - type: slicer
+    fields:
+    - dim_date[Date]
+    - dim_channel[Channel]
+    - dim_region[Region]
+    - dim_campaign[CampaignName]
+    x: 1030
+    y: 630
+    w: 230
+    h: 70
+  - type: line
+    fields:
+    - dim_date[Date]
+    measures:
+    - '[Sales]'
+    - '[Sales LY]'
+    x: 20
+    y: 50
+    w: 780
+    h: 560
+  - type: bar
+    fields:
+    - dim_product[Category]
+    measures:
+    - '[Sales]'
+    x: 820
+    y: 320
+    w: 440
+    h: 290
+    note: Use cumulative % for Pareto
+  - type: card
+    measure: '[Return Rate] (optional)'
+    x: 820
+    y: 50
+    w: 200
+    h: 250
+  - type: card
+    measure: '[Stock-out Rate] (optional)'
+    x: 1060
+    y: 50
+    w: 200
+    h: 250
+Product:
+  background: /mnt/data/retail_sales_project/powerbi/layouts/02_Product_Layout.png
+  components:
+  - type: slicer
+    fields:
+    - dim_product[Category]
+    - dim_product[Subcategory]
+    - dim_product[Brand]
+    x: 20
+    y: 630
+    w: 500
+    h: 70
+  - type: slicer
+    fields:
+    - dim_date[Date]
+    - dim_region[Region]
+    x: 530
+    y: 630
+    w: 730
+    h: 70
+  - type: matrix
+    rows:
+    - dim_product[Category]
+    - dim_product[Subcategory]
+    - dim_product[SKU]
+    values:
+    - '[Sales]'
+    - '[GM %]'
+    - '[Return Rate]'
+    x: 20
+    y: 50
+    w: 760
+    h: 560
+  - type: scatter
+    fields:
+    - '[Sales]'
+    - '[GM %]'
+    - '[Units]'
+    - dim_product[Category]
+    x: 800
+    y: 50
+    w: 460
+    h: 260
+  - type: waterfall
+    fields:
+    - '[Sales]'
+    - '[Discount]'
+    - '[COGS]'
+    - '[Gross Margin]'
+    x: 800
+    y: 340
+    w: 460
+    h: 270
+Channels:
+  background: /mnt/data/retail_sales_project/powerbi/layouts/03_Channels_Layout.png
+  components:
+  - type: slicer
+    fields:
+    - dim_channel[Channel]
+    - dim_region[Region]
+    - dim_date[Date]
+    x: 20
+    y: 630
+    w: 560
+    h: 70
+  - type: bar+line
+    fields:
+    - dim_channel[Channel]
+    measures:
+    - '[Sales]'
+    - '[GM %]'
+    x: 20
+    y: 320
+    w: 620
+    h: 290
+  - type: funnel
+    fields:
+    - Steps (Visit→ATC→Checkout→Purchase)
+    x: 20
+    y: 50
+    w: 620
+    h: 250
+  - type: map/treemap
+    fields:
+    - dim_region[Region]
+    measures:
+    - '[Sales]'
+    - '[GM %]'
+    x: 660
+    y: 50
+    w: 600
+    h: 560
+Pricing:
+  background: /mnt/data/retail_sales_project/powerbi/layouts/04_Pricing_Layout.png
+  components:
+  - type: slicer
+    fields:
+    - dim_product[Category]
+    - dim_product[Subcategory]
+    - dim_product[Brand]
+    - dim_date[Date]
+    x: 20
+    y: 630
+    w: 700
+    h: 70
+  - type: slicer
+    fields:
+    - dim_campaign[CampaignName]
+    - dim_campaign[IsPromo]
+    x: 740
+    y: 630
+    w: 520
+    h: 70
+  - type: combo
+    fields:
+    - dim_date[Date]
+    measures:
+    - '[Sales]'
+    - '[Discount %]'
+    x: 20
+    y: 320
+    w: 720
+    h: 290
+  - type: table
+    columns:
+    - dim_campaign[CampaignName]
+    - '[Promo Uplift %]'
+    - Cost (manual)
+    - ROI (calc)
+    x: 760
+    y: 50
+    w: 500
+    h: 280
+  - type: scatter
+    fields:
+    - '[Unit Price]'
+    - '[Units]'
+    - dim_product[Category]
+    x: 20
+    y: 50
+    w: 720
+    h: 250
+Customers:
+  background: /mnt/data/retail_sales_project/powerbi/layouts/05_Customers_Layout.png
+  components:
+  - type: slicer
+    fields:
+    - dim_customer[Segment]
+    - dim_customer[CohortYear]
+    - dim_customer[CohortMonth]
+    - dim_date[Date]
+    x: 20
+    y: 630
+    w: 760
+    h: 70
+  - type: heatmap
+    fields:
+    - R_bin
+    - F_bin
+    - '[Monetary]'
+    x: 20
+    y: 50
+    w: 560
+    h: 560
+  - type: line
+    fields:
+    - CohortMonth
+    measures:
+    - Retention %
+    x: 600
+    y: 50
+    w: 320
+    h: 260
+  - type: bar
+    fields:
+    - CustomerID
+    measures:
+    - '[Monetary]'
+    x: 940
+    y: 50
+    w: 320
+    h: 260
+  - type: table
+    columns:
+    - CustomerID
+    - Segment
+    - R
+    - F
+    - M
+    - CLV
+    x: 600
+    y: 330
+    w: 660
+    h: 280

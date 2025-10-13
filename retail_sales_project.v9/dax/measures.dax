@@ -1,0 +1,26 @@
+
+Sales := SUM(fact_sales[NetSales])
+Units := SUM(fact_sales[Quantity])
+COGS := SUM(fact_sales[COGS])
+Gross Margin := [Sales] - [COGS]
+GM % := DIVIDE([Gross Margin], [Sales])
+AOV := DIVIDE([Sales], DISTINCTCOUNT(fact_sales[OrderID]))
+Sales LY := CALCULATE([Sales], DATEADD('dim_date'[Date], -1, YEAR))
+YoY % := DIVIDE([Sales] - [Sales LY], [Sales LY])
+MA 28d := AVERAGEX(DATESINPERIOD('dim_date'[Date], MAX('dim_date'[Date]), -28, DAY), [Sales])
+Promo Uplift % :=
+VAR Base = CALCULATE([Sales], 'dim_campaign'[IsPromo]=FALSE())
+VAR Promo = CALCULATE([Sales], 'dim_campaign'[IsPromo]=TRUE())
+RETURN DIVIDE(Promo-Base, Base)
+
+
+-- =========================
+-- Forecast (optional DIY)
+-- Assumes a table 'ForecastCompare' with columns:
+--   [MonthDate] (date), [Actual], [Forecast]
+-- You can create it in Power Query by merging 'fact_monthly_sales' and 'forecast_backtest' on MonthDate.
+Forecast Actual := SUM(ForecastCompare[Actual])
+Forecast Pred := SUM(ForecastCompare[Forecast])
+Forecast Error := [Forecast Actual] - [Forecast Pred]
+Forecast MAE := AVERAGEX(VALUES(ForecastCompare[MonthDate]), ABS([Forecast Error]))
+Forecast Bias := AVERAGEX(VALUES(ForecastCompare[MonthDate]), [Forecast Error])

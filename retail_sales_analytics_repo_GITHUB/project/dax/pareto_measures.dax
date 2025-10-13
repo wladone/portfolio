@@ -1,0 +1,52 @@
+
+-- =========================
+-- Pareto 80/20 (by Product/SKU)
+-- Prerequisite: a bar chart by dim_product[SKU] or [Category] sorted by [Sales] desc.
+-- Use ALLSELECTED to respect slicers (Date/Channel/Region/Campaign).
+
+Sales := SUM(fact_sales[NetSales])
+Units := SUM(fact_sales[Quantity])
+COGS := SUM(fact_sales[COGS])
+Gross Margin := [Sales] - [COGS]
+GM % := DIVIDE([Gross Margin], [Sales])
+
+-- Rank of current SKU by Sales within current selection
+SKU Sales Rank :=
+RANKX(
+    ALLSELECTED(dim_product[SKU]),
+    [Sales],
+    ,
+    DESC,
+    Skip
+)
+
+-- % of Sales contributed by current SKU
+SKU Sales % :=
+DIVIDE(
+    [Sales],
+    CALCULATE([Sales], ALLSELECTED(dim_product[SKU]))
+)
+
+-- Cumulative % Sales up to current SKU (sorted by Sales desc)
+SKU Cum Sales % :=
+VAR CurrentRank = [SKU Sales Rank]
+VAR CumSales =
+    SUMX(
+        FILTER(
+            ALLSELECTED(dim_product[SKU]),
+            RANKX(ALLSELECTED(dim_product[SKU]), [Sales], , DESC, Skip) <= CurrentRank
+        ),
+        [Sales]
+    )
+VAR TotalSales = CALCULATE([Sales], ALLSELECTED(dim_product[SKU]))
+RETURN DIVIDE(CumSales, TotalSales)
+
+-- Flag to identify items that make up the first 80% of Sales
+Pareto 80% Flag := IF([SKU Cum Sales %] <= 0.8, "Top 80 (vânzări)", "Bottom 20")
+
+-- Helper for visuals: 0/1 mask for Top 80%
+Pareto 80% Mask := IF([SKU Cum Sales %] <= 0.8, 1, 0)
+
+-- Suggested visual:
+-- Combo chart with Columns = [Sales] by SKU and Line = [SKU Cum Sales %] (secondary axis, format as %).
+-- Add a slicer on [Pareto 80% Flag] to isolate Top 80 contributors.

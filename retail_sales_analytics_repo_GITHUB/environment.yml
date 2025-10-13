@@ -1,0 +1,14 @@
+
+name: retail-analytics
+channels:
+  - conda-forge
+dependencies:
+  - python>=3.10
+  - pandas>=2
+  - numpy
+  - matplotlib
+  - statsmodels
+  - nbformat
+  - xlsxwriter
+  - pyyaml
+  - pip
