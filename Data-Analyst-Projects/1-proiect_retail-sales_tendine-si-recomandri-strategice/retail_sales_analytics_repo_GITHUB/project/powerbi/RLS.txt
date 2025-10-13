@@ -1,0 +1,6 @@
+Role: RegionManager
+Table: dim_region
+DAX filter: dim_region[Region] IN VALUES(UserRegion[Region])
+
+-- Adăugați un tabel UserRegion cu coloane: UserPrincipalName, Region
+-- Creați relația (UserRegion[Region]) -> (dim_region[Region]) și folosiți USERPRINCIPALNAME() pentru mapping.

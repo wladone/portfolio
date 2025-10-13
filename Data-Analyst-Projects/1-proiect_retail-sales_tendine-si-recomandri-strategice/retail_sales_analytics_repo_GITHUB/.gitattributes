@@ -1,0 +1,5 @@
+
+# Treat Power BI files as binary
+*.pbix binary
+*.pbit binary
+*.bim binary
