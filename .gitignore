@@ -1,0 +1,82 @@
+
+# OS / editors
+.DS_Store
+Thumbs.db
+*.code-workspace
+.vscode/
+.idea/
+
+# Build / temp
+build/
+dist/
+obj/
+bin/
+*.log
+*.tmp
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv/
+
+# C / C++
+*.o
+*.obj
+*.exe
+*.dll
+*.lib
+*.pdb
+
+# MATLAB
+*.asv
+*.mex*
+*.slxc
+*.mdl.r*
+*.slx.r*
+*.m~
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data / outputs (keep small samples instead)
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.parquet
+
+# Archives / binaries (prefer LFS)
+*.zip
+*.7z
+*.rar
+*.pdf
+*.docx
+*.pptx
+*.mp3
+*.wav
+*.flac
+*.mp4
+*.mov
+*.mat
+*.tif
+*.tiff
+
+# --- Project-specific (DSP / CodeWarrior) ---
+DebuggerLog/
+iir_Data/
+proiect_eld_Data/
+*.mcp
+*.eld
+*.elf
+*.out
+*.abs
+*.map
+*.hex
+*.bin
+
+# Allow small docs/data even if some patterns above ignore binaries
+!docs/*.pdf
+!docs/*.PDF
+!data/*.wav
+!data/*.mp3
+!data/*.mat
