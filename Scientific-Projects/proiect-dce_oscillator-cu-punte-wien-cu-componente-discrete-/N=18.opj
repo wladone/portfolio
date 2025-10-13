@@ -1,0 +1,112 @@
+(ExpressProject "N=10"
+  (ProjectVersion "19981106")
+  (ProjectType "Analog or A/D Mixed Mode")
+  (Folder "Design Resources"
+    (Folder "Library"
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\1n4148.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\1n4148.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bc846b.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bc846b.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bc856b.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bc856b.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c2v7.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c2v7.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c5v6.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c5v6.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c10.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c10.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\mjd31cg.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\mjd31cg.lib"))
+      (File
+         "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\mmbfj309lt1g.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\mmbfj309lt1g.lib")))
+    (NoModify)
+    (File ".\n=18.DSN"
+      (Type "Schematic Design")
+      (DisplayName ".\n=18.DSN"))
+    (BuildFileAddedOrDeleted "x")
+    (CompileFileAddedOrDeleted "x")
+    (PSPICE_Regenerate_Netlist_Flag "FALSE"))
+  (Folder "Outputs"
+    (File ".\n=18-PSpiceFiles\SCHEMATIC1\SCHEMATIC1.net"
+      (Type "Report")
+      (DisplayName ".\n=18-PSpiceFiles\SCHEMATIC1\SCHEMATIC1.net")))
+  (Folder "PSpice Resources"
+    (Folder "Simulation Profiles"
+      (ActiveProfile ".\n=18-pspicefiles\schematic1\sim.sim")
+      (File.PSpice.{09528990-3187-11D2-BC7B-00A0C90CBF91}
+         ".\n=18-pspicefiles\schematic1\sim.sim"
+        (DisplayName "SCHEMATIC1-sim")
+        (Type "PSpice Profile")))
+    (Folder "Model Libraries"
+      (Sort User)
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\1n4148.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\1n4148.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bc846b.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bc846b.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bc856b.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bc856b.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c2v7.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c2v7.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c5v6.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c5v6.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c10.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\bzx84c10.lib"))
+      (File "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\mjd31cg.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\mjd31cg.lib"))
+      (File
+         "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\mmbfj309lt1g.lib"
+        (Type "Schematic Library")
+        (DisplayName
+           "..\..\..\..\lib_modelepspice_anexa_1\modele_a1_lib\mmbfj309lt1g.lib")))
+    (Folder "Stimulus Files"
+      (Sort User))
+    (Folder "Include Files"
+      (Sort User)))
+  (DefaultLibraryBrowseDirectory "library\PSpice")
+  (PartMRUSelector)
+  (GlobalState
+    (FileView
+      (Path "Design Resources")
+      (Path "Design Resources" "Library")
+      (Path "Outputs")
+      (Path "PSpice Resources")
+      (Path "PSpice Resources" "Model Libraries")
+      (Path "PSpice Resources" "Simulation Profiles"))
+    (HierarchyView)
+    (Doc
+      (Type "COrCapturePMDoc")
+      (Frame
+        (Placement "44 0 1 -1 -1 -8 -31 0 200 0 293"))
+      (Tab 0)))
+  (MPSSessionName "3CPO"))
