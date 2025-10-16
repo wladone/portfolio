@@ -1,0 +1,54 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run imcrypt eval",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": ["-m", "imcrypt.cli", "eval", "-i", "${workspaceFolder}\\data\\Watch_256.jpg"],
+      "console": "integratedTerminal",
+      "env": {}
+    },
+    {
+      "name": "Run imcrypt encrypt (example)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "imcrypt.cli",
+        "encrypt",
+        "-i",
+        "${workspaceFolder}\\data\\Watch_256.jpg",
+        "-o",
+        "${workspaceFolder}\\data\\Watch_256_enc.png",
+        "-p",
+        "testpass"
+      ],
+      "console": "integratedTerminal",
+      "env": {}
+    },
+    {
+      "name": "Run imcrypt decrypt (example)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": [
+        "-m",
+        "imcrypt.cli",
+        "decrypt",
+        "-i",
+        "${workspaceFolder}\\data\\Watch_256_enc.png",
+        "-k",
+        "${workspaceFolder}\\data\\Watch_256_enc.keys.npz",
+        "-o",
+        "${workspaceFolder}\\data\\Watch_256_dec.png",
+        "-p",
+        "testpass"
+      ],
+      "console": "integratedTerminal",
+      "env": {}
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "001-real-time-system" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r prototype/requirements.txt
+      - name: Run Python tests
+        run: pytest -q
+      - name: Setup CMake
+        uses: lukka/get-cmake@v3
+        with:
+          cmakeVersion: '3.26.4'
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cd build
+          cmake ..\prototype\engine -A x64 -DCMAKE_BUILD_TYPE=Release
+      - name: Build C++ stub
+        run: cmake --build build --config Release
+      - name: Upload engine artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: engine-stub-windows
+          path: build\\Release\\engine_stub.exe

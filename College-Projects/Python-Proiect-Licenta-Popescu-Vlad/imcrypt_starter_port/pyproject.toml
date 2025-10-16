@@ -1,0 +1,14 @@
+[project]
+name = "imcrypt"
+version = "0.1.0"
+description = "Image encryption/decryption using chaotic maps (Python port)"
+authors = [{name="Vlad Gabriel Popescu"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pillow"]
+
+[project.scripts]
+imcrypt = "imcrypt.cli:main"
+
+[tool.setuptools]
+packages = ["imcrypt"]

@@ -1,0 +1,17 @@
+/* SysMon starter theme — dark, orange-accent */
+* { color: #F5F7FA; }
+QMainWindow, QWidget { background-color: #0E0F12; }
+QStatusBar { background: #15171C; color: #AAB2C0; }
+
+/* Panels */
+QGroupBox, QDockWidget > QWidget { background: #15171C; border: 1px solid #222832; border-radius: 8px; }
+QDockWidget::title { color: #AAB2C0; }
+
+/* Table */
+QHeaderView::section { background: #15171C; color: #AAB2C0; border: none; padding: 6px; }
+QTableView::item:selected { background: rgba(255,122,24,0.18); }
+QTableView::item:hover { background: rgba(255,255,255,0.06); }
+
+/* Buttons */
+QToolButton { background: transparent; border: none; }
+QToolButton:hover { background: rgba(255,255,255,0.12); border-radius: 4px; }

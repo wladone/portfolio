@@ -1,0 +1,20 @@
+FROM ubuntu:22.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential cmake ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Work in the engine source directory
+WORKDIR /src/engine
+
+# Copy sources from the repository root as build context
+COPY prototype/engine /src/engine
+COPY prototype/engine_stub.cpp /src/engine_stub.cpp
+
+RUN mkdir -p build \
+    && cd build \
+    && cmake .. -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build . --config Release
+
+CMD ["/src/engine/build/engine_stub"]

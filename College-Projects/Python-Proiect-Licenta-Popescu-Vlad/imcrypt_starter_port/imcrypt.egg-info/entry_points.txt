@@ -1,0 +1,2 @@
+[console_scripts]
+imcrypt = imcrypt.cli:main

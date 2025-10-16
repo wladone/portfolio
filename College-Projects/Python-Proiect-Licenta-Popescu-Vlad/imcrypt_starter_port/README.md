@@ -1,0 +1,16 @@
+# imcrypt — Port Python pentru criptarea/decriptarea imaginilor (Licență)
+
+Acest pachet implementează:
+- Permutare rând/coloană derivată din hărți haotice (Logistic, Hénon, Chebyshev)
+- Difuzie XOR cu keystream haotic
+- Metrici: entropie, corelații (H/V/D), NPCR și UACI
+- CLI: `imcrypt`
+
+## Instalare (Windows PowerShell, cu venv)
+```powershell
+cd "D:\Python Proiect Licenta Popescu Vlad\imcrypt_starter_port"
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -U pip
+pip install -r requirements.txt
+pip install -e .
