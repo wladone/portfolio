@@ -1,3 +1,11 @@
 
 # Editor metadata
 .kilocodemodes
+.venv/
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.vs/
+bin/
+obj/
+*.user
