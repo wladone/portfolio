@@ -1,0 +1,19 @@
+﻿{
+  "type": "struct",
+  "fields": [
+    {"name": "inventory_date", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "warehouse_code", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "product_id", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "product_name", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "category", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "quantity_on_hand", "type": "long", "nullable": false, "metadata": {}},
+    {"name": "unit_cost_euro", "type": "double", "nullable": false, "metadata": {}},
+    {"name": "supplier_id", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "restock_threshold", "type": "integer", "nullable": true, "metadata": {}},
+    {"name": "restock_lead_days", "type": "integer", "nullable": true, "metadata": {}},
+    {"name": "is_active", "type": "boolean", "nullable": true, "metadata": {}},
+    {"name": "last_updated_ts", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "last_sale_ts", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "lifetime_revenue_euro", "type": "double", "nullable": true, "metadata": {}}
+  ]
+}

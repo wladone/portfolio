@@ -1,0 +1,574 @@
+openapi: 3.0.3
+info:
+  title: E-commerce Streaming Pipeline API
+  description: |
+    REST API for configuring and managing the real-time e-commerce streaming pipeline.
+
+    ## Overview
+    This API provides endpoints for:
+    - Pipeline configuration management
+    - Real-time metrics and monitoring
+    - Data quality validation rules
+    - Cost monitoring and optimization
+
+    ## Authentication
+    All endpoints require GCP IAM authentication with appropriate permissions.
+
+  version: 1.0.0
+  contact:
+    name: Data Engineering Team
+    email: data-eng@yourcompany.com
+
+servers:
+  - url: https://your-project.cloudfunctions.net/pipeline-api/v1
+    description: Production API Gateway
+  - url: http://localhost:8080/v1
+    description: Local development
+
+components:
+  schemas:
+    PipelineConfig:
+      type: object
+      required:
+        - project_id
+        - region
+        - topics
+        - bigquery_config
+      properties:
+        project_id:
+          type: string
+          pattern: '^[a-z][a-z0-9-]{5,29}$'
+          example: "my-ecommerce-project"
+          description: "GCP project ID"
+        region:
+          type: string
+          pattern: '^[a-z]+-[a-z]+[0-9]$'
+          example: "europe-central2"
+          description: "GCP region"
+        topics:
+          type: object
+          properties:
+            clicks:
+              type: string
+              example: "projects/my-project/topics/clicks"
+            transactions:
+              type: string
+              example: "projects/my-project/topics/transactions"
+            stock:
+              type: string
+              example: "projects/my-project/topics/stock"
+            dead_letter:
+              type: string
+              example: "projects/my-project/topics/dead-letter"
+        bigquery_config:
+          type: object
+          properties:
+            dataset:
+              type: string
+              example: "ecommerce"
+            tables:
+              type: object
+              properties:
+                views:
+                  type: string
+                  example: "product_views_summary"
+                sales:
+                  type: string
+                  example: "sales_summary"
+                stock:
+                  type: string
+                  example: "inventory_summary"
+        bigtable_config:
+          type: object
+          properties:
+            instance:
+              type: string
+              example: "ecommerce-bigtable"
+            table:
+              type: string
+              example: "product_stats"
+        window_config:
+          type: object
+          properties:
+            views_window_seconds:
+              type: integer
+              minimum: 1
+              maximum: 3600
+              example: 60
+              description: "Window size for product view aggregation"
+            sales_window_seconds:
+              type: integer
+              minimum: 1
+              maximum: 3600
+              example: 300
+              description: "Window size for sales aggregation"
+        validation_config:
+          type: object
+          properties:
+            enable_schema_validation:
+              type: boolean
+              default: true
+            enable_business_rules:
+              type: boolean
+              default: false
+            dead_letter_topic:
+              type: string
+              description: "Topic for invalid events"
+
+    PipelineStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: ["running", "stopped", "error", "starting", "stopping"]
+          example: "running"
+        job_id:
+          type: string
+          example: "2025-01-01_12-00-00-123456"
+        start_time:
+          type: string
+          format: date-time
+          example: "2025-01-01T12:00:00Z"
+        uptime_seconds:
+          type: integer
+          example: 3600
+        metrics:
+          type: object
+          properties:
+            events_processed_total:
+              type: integer
+              example: 150000
+            events_per_second:
+              type: number
+              example: 45.2
+            error_rate:
+              type: number
+              example: 0.001
+            avg_latency_ms:
+              type: number
+              example: 150.5
+
+    DataQualityRule:
+      type: object
+      required:
+        - name
+        - rule_type
+        - config
+      properties:
+        name:
+          type: string
+          example: "product_id_format"
+          description: "Unique rule identifier"
+        rule_type:
+          type: string
+          enum: ["regex", "range", "required_fields", "duplicate_check", "business_rule"]
+          example: "regex"
+        config:
+          type: object
+          description: "Rule-specific configuration"
+        enabled:
+          type: boolean
+          default: true
+        severity:
+          type: string
+          enum: ["error", "warning", "info"]
+          default: "error"
+
+    CostMetrics:
+      type: object
+      properties:
+        period:
+          type: string
+          example: "2025-01-01"
+          description: "Time period for cost calculation"
+        total_cost:
+          type: number
+          example: 125.50
+          description: "Total cost in USD"
+        breakdown:
+          type: object
+          properties:
+            dataflow:
+              type: number
+              example: 85.30
+            bigquery:
+              type: number
+              example: 25.20
+            bigtable:
+              type: number
+              example: 10.00
+            pubsub:
+              type: number
+              example: 5.00
+        budget:
+          type: object
+          properties:
+            limit:
+              type: number
+              example: 200.00
+            alert_threshold:
+              type: number
+              example: 150.00
+            forecast:
+              type: number
+              example: 180.00
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "GCP IAM service account authentication"
+
+paths:
+  /pipeline/config:
+    get:
+      summary: "Get current pipeline configuration"
+      description: "Retrieve the current pipeline configuration and settings"
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Current pipeline configuration"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineConfig'
+        '401':
+          description: "Unauthorized"
+        '403':
+          description: "Forbidden"
+        '404':
+          description: "Pipeline not found"
+
+    put:
+      summary: "Update pipeline configuration"
+      description: "Update the pipeline configuration with new settings"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PipelineConfig'
+      responses:
+        '200':
+          description: "Configuration updated successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "updated"
+                  restart_required:
+                    type: boolean
+                    example: true
+        '400':
+          description: "Invalid configuration"
+        '401':
+          description: "Unauthorized"
+        '403':
+          description: "Forbidden"
+
+  /pipeline/status:
+    get:
+      summary: "Get pipeline status and metrics"
+      description: "Retrieve current pipeline status, health metrics, and performance indicators"
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Pipeline status and metrics"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PipelineStatus'
+        '401':
+          description: "Unauthorized"
+        '503':
+          description: "Pipeline unavailable"
+
+  /pipeline/start:
+    post:
+      summary: "Start the pipeline"
+      description: "Start the streaming pipeline with current configuration"
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Pipeline started successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    example: "2025-01-01_12-00-00-123456"
+                  status:
+                    type: string
+                    example: "starting"
+        '409':
+          description: "Pipeline already running"
+        '401':
+          description: "Unauthorized"
+        '403':
+          description: "Forbidden"
+
+  /pipeline/stop:
+    post:
+      summary: "Stop the pipeline"
+      description: "Gracefully stop the streaming pipeline"
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Pipeline stopped successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "stopped"
+                  duration_seconds:
+                    type: integer
+                    example: 3600
+        '409':
+          description: "Pipeline not running"
+        '401':
+          description: "Unauthorized"
+        '403':
+          description: "Forbidden"
+
+  /data-quality/rules:
+    get:
+      summary: "List data quality rules"
+      description: "Retrieve all configured data quality validation rules"
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "List of data quality rules"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rules:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DataQualityRule'
+
+    post:
+      summary: "Create data quality rule"
+      description: "Add a new data quality validation rule"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataQualityRule'
+      responses:
+        '201':
+          description: "Rule created successfully"
+        '400':
+          description: "Invalid rule configuration"
+        '409':
+          description: "Rule already exists"
+
+  /data-quality/rules/{ruleName}:
+    put:
+      summary: "Update data quality rule"
+      description: "Update an existing data quality validation rule"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: ruleName
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "product_id_format"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataQualityRule'
+      responses:
+        '200':
+          description: "Rule updated successfully"
+        '404':
+          description: "Rule not found"
+
+    delete:
+      summary: "Delete data quality rule"
+      description: "Remove a data quality validation rule"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: ruleName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: "Rule deleted successfully"
+        '404':
+          description: "Rule not found"
+
+  /costs:
+    get:
+      summary: "Get cost metrics"
+      description: "Retrieve cost information and budget status for the pipeline"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: period
+          in: query
+          schema:
+            type: string
+            format: date
+          example: "2025-01"
+          description: "Time period for cost calculation (YYYY-MM format)"
+      responses:
+        '200':
+          description: "Cost metrics and budget information"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostMetrics'
+        '401':
+          description: "Unauthorized"
+
+  /costs/budget:
+    put:
+      summary: "Update cost budget"
+      description: "Set or update cost budget limits and alert thresholds"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - monthly_limit
+                - alert_threshold
+              properties:
+                monthly_limit:
+                  type: number
+                  minimum: 0
+                  example: 200.00
+                alert_threshold:
+                  type: number
+                  minimum: 0
+                  example: 150.00
+      responses:
+        '200':
+          description: "Budget updated successfully"
+        '401':
+          description: "Unauthorized"
+        '403':
+          description: "Forbidden"
+
+  /monitoring/alerts:
+    get:
+      summary: "Get active alerts"
+      description: "Retrieve current pipeline alerts and health status"
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: "Current alerts and health status"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  alerts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        severity:
+                          type: string
+                          enum: ["critical", "warning", "info"]
+                        message:
+                          type: string
+                        timestamp:
+                          type: string
+                          format: date-time
+                  overall_health:
+                    type: string
+                    enum: ["healthy", "degraded", "unhealthy"]
+
+  /debug/events:
+    post:
+      summary: "Debug event processing"
+      description: "Submit test events to debug pipeline processing (development only)"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event_type:
+                  type: string
+                  enum: ["click", "transaction", "stock"]
+                  example: "click"
+                event_data:
+                  type: object
+                  description: "Event payload to process"
+                topic:
+                  type: string
+                  example: "projects/my-project/topics/clicks"
+      responses:
+        '200':
+          description: "Event processed successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  processed:
+                    type: boolean
+                  output_topic:
+                    type: string
+                  validation_errors:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: "Invalid event data"
+        '403':
+          description: "Debug mode not enabled in production"
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: pipeline
+    description: "Pipeline lifecycle management"
+  - name: configuration
+    description: "Pipeline configuration and settings"
+  - name: data-quality
+    description: "Data quality validation and rules"
+  - name: costs
+    description: "Cost monitoring and budget management"
+  - name: monitoring
+    description: "Monitoring and alerting"
+  - name: debug
+    description: "Debugging and testing utilities"

@@ -1,0 +1,5 @@
+192.168.1.193 - frank [01/Oct/2025:15:07:12 +0300] "PUT /health HTTP/1.1" 401 3426 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.80 - bob [01/Oct/2025:15:07:12 +0300] "POST /index.html HTTP/1.1" 502 2110 "https://google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.1 - frank [01/Oct/2025:15:07:12 +0300] "DELETE / HTTP/2.0" 200 3867 "-" "curl/8.0.1"
+192.168.1.175 - alice [01/Oct/2025:15:07:12 +0300] "GET /index.html HTTP/1.1" 400 4013 "http://example.com/" "curl/8.0.1"
+192.168.1.32 - alice [01/Oct/2025:15:07:12 +0300] "GET /api/v1/items HTTP/2.0" 201 4880 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"

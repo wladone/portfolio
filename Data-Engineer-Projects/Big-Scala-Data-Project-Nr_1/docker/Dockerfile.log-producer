@@ -1,0 +1,64 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install required packages
+RUN pip install kafka-python
+
+# Copy log generator script
+COPY scripts/generate_logs.py /app/generate_logs.py
+
+# Create Kafka log producer script
+RUN echo '#!/usr/bin/env python3' > /app/kafka_producer.py && \
+    echo 'import os' >> /app/kafka_producer.py && \
+    echo 'import time' >> /app/kafka_producer.py && \
+    echo 'import json' >> /app/kafka_producer.py && \
+    echo 'import random' >> /app/kafka_producer.py && \
+    echo 'from datetime import datetime' >> /app/kafka_producer.py && \
+    echo 'from kafka import KafkaProducer' >> /app/kafka_producer.py && \
+    echo 'from generate_logs import LogGenerator' >> /app/kafka_producer.py && \
+    echo '' >> /app/kafka_producer.py && \
+    echo 'def main():' >> /app/kafka_producer.py && \
+    echo '    kafka_broker = os.getenv("KAFKA_BROKER", "localhost:9092")' >> /app/kafka_producer.py && \
+    echo '    kafka_topic = os.getenv("KAFKA_TOPIC", "log-events")' >> /app/kafka_producer.py && \
+    echo '    log_interval = int(os.getenv("LOG_INTERVAL", "1000"))' >> /app/kafka_producer.py && \
+    echo '' >> /app/kafka_producer.py && \
+    echo '    print(f"Connecting to Kafka at {kafka_broker}")' >> /app/kafka_producer.py && \
+    echo '    print(f"Publishing to topic: {kafka_topic}")' >> /app/kafka_producer.py && \
+    echo '    print(f"Log interval: {log_interval}ms")' >> /app/kafka_producer.py && \
+    echo '' >> /app/kafka_producer.py && \
+    echo '    try:' >> /app/kafka_producer.py && \
+    echo '        producer = KafkaProducer(' >> /app/kafka_producer.py && \
+    echo '            bootstrap_servers=[kafka_broker],' >> /app/kafka_producer.py && \
+    echo '            value_serializer=lambda v: v.encode("utf-8"),' >> /app/kafka_producer.py && \
+    echo '            key_serializer=lambda v: v.encode("utf-8") if v else None' >> /app/kafka_producer.py && \
+    echo '        )' >> /app/kafka_producer.py && \
+    echo '' >> /app/kafka_producer.py && \
+    echo '        generator = LogGenerator(seed=42)' >> /app/kafka_producer.py && \
+    echo '' >> /app/kafka_producer.py && \
+    echo '        print("Starting log production... Press Ctrl+C to stop")' >> /app/kafka_producer.py && \
+    echo '' >> /app/kafka_producer.py && \
+    echo '        count = 0' >> /app/kafka_producer.py && \
+    echo '        while True:' >> /app/kafka_producer.py && \
+    echo '            log_entry = generator.generate_log_entry(count)' >> /app/kafka_producer.py && \
+    echo '            producer.send(kafka_topic, value=log_entry)' >> /app/kafka_producer.py && \
+    echo '            count += 1' >> /app/kafka_producer.py && \
+    echo '            if count % 100 == 0:' >> /app/kafka_producer.py && \
+    echo '                print(f"Sent {count} messages")' >> /app/kafka_producer.py && \
+    echo '            time.sleep(log_interval / 1000.0)' >> /app/kafka_producer.py && \
+    echo '' >> /app/kafka_producer.py && \
+    echo '    except KeyboardInterrupt:' >> /app/kafka_producer.py && \
+    echo '        print(f"\\nStopping producer. Sent {count} total messages")' >> /app/kafka_producer.py && \
+    echo '    except Exception as e:' >> /app/kafka_producer.py && \
+    echo '        print(f"Error: {e}")' >> /app/kafka_producer.py && \
+    echo '    finally:' >> /app/kafka_producer.py && \
+    echo '        producer.close()' >> /app/kafka_producer.py && \
+    echo '' >> /app/kafka_producer.py && \
+    echo 'if __name__ == "__main__":' >> /app/kafka_producer.py && \
+    echo '    main()' >> /app/kafka_producer.py
+
+# Make scripts executable
+RUN chmod +x /app/generate_logs.py /app/kafka_producer.py
+
+# Run the producer
+CMD ["/app/kafka_producer.py"]

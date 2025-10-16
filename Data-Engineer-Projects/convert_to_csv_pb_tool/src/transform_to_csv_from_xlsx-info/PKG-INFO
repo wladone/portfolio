@@ -1,0 +1,111 @@
+Metadata-Version: 2.4
+Name: regatta-to-powerbi
+Version: 0.1.0
+Summary: Convert regatta Excel results into Power BI ready CSVs.
+Author: Regatta Analytics
+License: ﻿MIT License
+        
+        Copyright (c) 2025
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy<2.0,>=1.24
+Requires-Dist: pandas<3.0,>=2.0
+Requires-Dist: openpyxl<4.0,>=3.1
+Requires-Dist: typer<0.10,>=0.7
+Requires-Dist: rich<14,>=13
+Requires-Dist: click<8.2,>=8.1
+Provides-Extra: dev
+Requires-Dist: pytest<8,>=7; extra == "dev"
+Dynamic: license-file
+
+# regatta-to-powerbi
+
+`regatta-to-powerbi` converts race results maintained in Excel into tidy, Power BI ready CSV dimension and fact tables with the data quality signals analysts expect. The CLI can scan an input folder for a workbook, standardises text, coerces numeric values, parses elapsed and corrected times, builds surrogate keys, and writes a dataset you can load into Power BI with relationships and measures that just work.
+
+An empty `input/` directory is provided for dropping Excel files, and `powerbi_dataset/` is the default output location (existing files are overwritten when you run the tool).
+
+## Quick start
+
+```
+python -m venv .venv
+# Windows
+.venv\\Scripts\\activate
+# macOS/Linux
+source .venv/bin/activate
+pip install -U pip
+pip install -e .
+regatta-to-powerbi --in-dir input --workbook-name "Technical Data Quality Analyst exercise[1][2][8][90].xlsx" --out-dir powerbi_dataset
+```
+
+### One-step bootstrap (creates venv + runs CLI)
+
+```
+python run_regatta_to_powerbi.py --in-dir input --workbook-name "Technical Data Quality Analyst exercise[1][2][8][90].xlsx" --out-dir powerbi_dataset
+```
+
+The first run creates/installs into `.venv`. Later runs detect the ready marker automatically; add `--force-install` if you want to refresh dependencies, or `--skip-install` to explicitly bypass the install step.
+
+To point to a workbook outside the `input/` folder, add `--xlsx-path "path/to.xlsx"`.
+
+## Power BI model
+
+- `fact_results[Sail Number]` ? `dim_boat[Sail Number]` (many-to-one)
+- `fact_results[RaceKey]` ? `dim_race[RaceKey]` (many-to-one)
+- `fact_results[Division]` ? `dim_division[Division]` (many-to-one)
+
+## Suggested DAX measures
+
+```DAX
+Boats = DISTINCTCOUNT(fact_results[Sail Number])
+Races = DISTINCTCOUNT(fact_results[Race Number])
+Regattas = DISTINCTCOUNT(fact_results[Regatta Number])
+Winners = CALCULATE(COUNTROWS(fact_results), fact_results[Rank] = 1)
+Avg Points = AVERAGE(fact_results[Points])
+Median Points = MEDIAN(fact_results[Points])
+Avg Corrected (sec) = AVERAGE(fact_results[Corrected_sec])
+% Missing Corrected = DIVIDE(CALCULATE(COUNTROWS(fact_results), fact_results[IsCorrectedMissing] = TRUE()), COUNTROWS(fact_results))
+```
+
+## Project layout
+
+```
+regatta-to-powerbi/
+  README.md
+  LICENSE
+  requirements.txt
+  pyproject.toml
+  .gitignore
+  input/
+  powerbi_dataset/
+  run_regatta_to_powerbi.py
+  src/regatta_to_powerbi/__init__.py
+  src/regatta_to_powerbi/cli.py
+  src/regatta_to_powerbi/transform.py
+  tests/test_transform.py
+```
+
+## Development notes
+
+- Python 3.10+
+- Uses pandas, numpy, openpyxl, typer, rich, pytest
+- Run `pytest` from an activated virtual environment to exercise the data shaping logic

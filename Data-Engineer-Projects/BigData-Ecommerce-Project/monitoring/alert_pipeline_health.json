@@ -1,0 +1,43 @@
+{
+  "displayName": "Dataflow Pipeline Health Check",
+  "combiner": "OR",
+  "conditions": [
+    {
+      "displayName": "Pipeline not running",
+      "conditionThreshold": {
+        "filter": "metric.type=\"dataflow.googleapis.com/job/is_failed\" AND resource.type=\"dataflow_job\"",
+        "duration": "0s",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 0,
+        "trigger": {
+          "count": 1
+        }
+      }
+    },
+    {
+      "displayName": "Low throughput",
+      "conditionThreshold": {
+        "filter": "metric.type=\"dataflow.googleapis.com/job/element_count\" AND resource.type=\"dataflow_job\"",
+        "duration": "600s",
+        "comparison": "COMPARISON_LT",
+        "thresholdValue": 10,
+        "trigger": {
+          "count": 1
+        },
+        "aggregation": {
+          "alignmentPeriod": "300s",
+          "perSeriesAligner": "ALIGN_RATE",
+          "crossSeriesReducer": "REDUCE_SUM"
+        }
+      }
+    }
+  ],
+  "notificationChannels": [
+    "projects/${PROJECT_ID}/notificationChannels/EMAIL_CHANNEL_ID",
+    "projects/${PROJECT_ID}/notificationChannels/SLACK_CHANNEL_ID"
+  ],
+  "documentation": {
+    "content": "Pipeline health alerts - configure actual notification channel IDs in deployment",
+    "mimeType": "text/markdown"
+  }
+}

@@ -1,0 +1,2 @@
+[console_scripts]
+regatta-to-powerbi = regatta_to_powerbi.cli:app

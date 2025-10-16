@@ -1,0 +1,24 @@
+﻿{
+  "displayName": "Dataflow Dead-letter Spike",
+  "combiner": "OR",
+  "conditions": [
+    {
+      "displayName": "Dead-letter count high",
+      "conditionThreshold": {
+        "filter": "metric.type=\"dataflow.googleapis.com/job/metric_count\" AND resource.type=\"dataflow_job\" AND metric.label.metric_name=\"ecommerce_pipeline_click_invalid\"",
+        "duration": "0s",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 100,
+        "trigger": {
+          "count": 1
+        },
+        "aggregation": {
+          "alignmentPeriod": "300s",
+          "perSeriesAligner": "ALIGN_MEAN",
+          "crossSeriesReducer": "REDUCE_SUM"
+        }
+      }
+    }
+  ],
+  "notificationChannels": []
+}

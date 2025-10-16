@@ -1,0 +1,26 @@
+# Existing dependencies
+pyspark>=3.5.0
+delta-spark>=3.0.0
+kafka-python>=2.0.2
+pytest>=8.0.0
+pytest-cov>=4.0.0
+
+# New Streamlit dependencies
+streamlit>=1.28.0
+plotly>=5.17.0
+pandas>=2.1.0
+numpy>=1.24.0
+pillow>=10.0.0
+
+# Optional: Enhanced theming
+streamlit-extras>=0.3.0
+streamlit-option-menu>=0.3.0
+
+# Security scanning tools
+bandit>=1.7.0
+safety>=2.3.0
+
+# Load testing
+locust>=2.15.0
+# Databricks connection
+databricks-sql-connector>=3.0.0

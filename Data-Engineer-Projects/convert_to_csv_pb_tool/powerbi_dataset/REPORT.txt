@@ -1,0 +1,21 @@
+Schema Checks
+- fact_results: OK
+- dim_boat: OK
+- dim_race: OK
+- dim_division: OK
+
+Uniqueness
+- fact_results.FactKey: OK
+- dim_boat.Sail Number: OK
+- dim_race.RaceKey: OK
+- dim_division.Division: OK
+
+Foreign Key Coverage
+- Sail Number -> dim_boat: OK
+- RaceKey -> dim_race: OK
+- Division -> dim_division: OK
+
+Time Completeness
+- Elapsed_sec completeness: before 97.3% / after 97.3%
+- Corrected_sec completeness: before 98.4% / after 98.4%
+- Remaining missing FactKeys: None

@@ -1,0 +1,164 @@
+services:
+  cassandra:
+    image: bitnami/cassandra:4.1
+    container_name: log-analytics-cassandra-dev
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: log-analytics-cluster
+      CASSANDRA_DC: datacenter1
+      CASSANDRA_RACK: rack1
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_PASSWORD_SEEDER: "yes"
+      CASSANDRA_PASSWORD: cassandra
+    volumes:
+      - cassandra-dev-data:/bitnami/cassandra/data
+      - ./cassandra/schema.cql:/docker-entrypoint-initdb.d/01-schema.cql:ro
+      - ./cassandra/schema_by_day.cql:/docker-entrypoint-initdb.d/02-schema-by-day.cql:ro
+    networks:
+      - log-analytics-dev-network
+    healthcheck:
+      test:
+        ["CMD-SHELL", "cqlsh -u cassandra -p cassandra -e 'DESCRIBE KEYSPACES'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  cassandra-web:
+    image: cassandra-web:latest
+    container_name: log-analytics-cassandra-web-dev
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      CASSANDRA_HOST: cassandra
+      CASSANDRA_PORT: 9042
+      CASSANDRA_USERNAME: cassandra
+      CASSANDRA_PASSWORD: cassandra
+    networks:
+      - log-analytics-dev-network
+    profiles:
+      - cassandra-ui
+
+  # Simplified Spark driver - just run the application without Cassandra for now
+  spark-driver:
+    image: openjdk:17-jdk-slim
+    container_name: log-analytics-spark-driver
+    volumes:
+      - ../target/scala-2.12:/app/jars:ro
+      - ../input:/app/input
+      - ../output:/app/output
+      - ../checkpoint:/app/checkpoint
+      - ../scripts:/app/scripts:ro
+    networks:
+      - log-analytics-dev-network
+    environment:
+      SPARK_MASTER: local[*]
+      LOG_LEVEL: WARN
+    command: >
+      bash -c "
+        # Download and setup Spark
+        wget -q https://archive.apache.org/dist/spark/spark-3.5.0/spark-3.5.0-bin-hadoop3.tgz &&
+        tar -xzf spark-3.5.0-bin-hadoop3.tgz &&
+        export SPARK_HOME=/spark-3.5.0-bin-hadoop3 &&
+        export PATH=$$SPARK_HOME/bin:$$PATH &&
+        # Run the application
+        java -cp /app/jars/log-analytics-pipeline-1.0.0.jar:/spark-3.5.0-bin-hadoop3/jars/* com.example.logstream.FileStreamApp --input /app/input --output /app/output --checkpoint /app/checkpoint
+      "
+    restart: unless-stopped
+
+  # Optional Kafka service (can be enabled with --profile kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: log-analytics-zookeeper-dev
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - log-analytics-dev-network
+    profiles:
+      - kafka
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: log-analytics-kafka-dev
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+    networks:
+      - log-analytics-dev-network
+    volumes:
+      - kafka-dev-data:/var/lib/kafka/data
+    profiles:
+      - kafka
+    healthcheck:
+      test:
+        ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: log-analytics-kafka-ui-dev
+    depends_on:
+      kafka:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+    networks:
+      - log-analytics-dev-network
+    profiles:
+      - kafka-ui
+
+  log-producer:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.log-producer
+    container_name: log-analytics-producer-dev
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER: kafka:29092
+      KAFKA_TOPIC: log-events
+      LOG_INTERVAL: 1000
+    networks:
+      - log-analytics-dev-network
+    profiles:
+      - kafka
+    restart: unless-stopped
+
+volumes:
+  cassandra-dev-data:
+    driver: local
+  kafka-dev-data:
+    driver: local
+
+networks:
+  log-analytics-dev-network:
+    driver: bridge

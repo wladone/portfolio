@@ -1,0 +1,5 @@
+192.168.1.163 - frank [01/Oct/2025:15:10:18 +0300] "GET /index.html HTTP/1.1" 200 910 "https://google.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.172 - frank [01/Oct/2025:15:10:18 +0300] "POST /api/v1/items HTTP/1.1" 401 2023 "http://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.67 - bob [01/Oct/2025:15:10:18 +0300] "PUT /login HTTP/2.0" 200 3924 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.28 - - [01/Oct/2025:15:10:18 +0300] "DELETE / HTTP/2.0" 204 4478 "https://google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.124 - bob [01/Oct/2025:15:10:18 +0300] "POST /login HTTP/2.0" 502 2469 "https://google.com/" "curl/8.0.1"

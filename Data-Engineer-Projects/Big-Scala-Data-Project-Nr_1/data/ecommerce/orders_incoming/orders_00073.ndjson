@@ -1,0 +1,5 @@
+{"event_time":1759385500676,"order_id":"f238d5aa-9759-4aa0-855b-11f1aa27fccf","price":9.99,"product_id":85,"quantity":4,"user_id":"user_0814"}
+{"event_time":1759385501153,"order_id":"20e148bd-15ec-46ca-93e6-7fbf00b65270","price":19.99,"product_id":85,"quantity":3,"user_id":"user_0028"}
+{"event_time":1759385501624,"order_id":"7ca26189-a309-4b24-9beb-772ecca9960c","price":79.99,"product_id":94,"quantity":4,"user_id":"user_0483"}
+{"event_time":1759385501297,"order_id":"8919e6bd-7425-482b-bbc5-5e615cc0df8d","price":99.99,"product_id":31,"quantity":2,"user_id":"user_0401"}
+{"event_time":1759385500736,"order_id":"f080a194-2d93-4d70-ad2a-1b1527f07e0d","price":79.99,"product_id":81,"quantity":5,"user_id":"user_0413"}

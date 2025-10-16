@@ -1,0 +1,5 @@
+192.168.1.197 - - [01/Oct/2025:15:10:14 +0300] "GET /health HTTP/1.1" 200 148 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.145 - alice [01/Oct/2025:15:10:14 +0300] "DELETE /api/v1/items/42 HTTP/1.1" 500 630 "-" "curl/8.0.1"
+192.168.1.116 - bob [01/Oct/2025:15:10:14 +0300] "POST /index.html HTTP/2.0" 503 2838 "https://google.com/" "curl/8.0.1"
+192.168.1.88 - bob [01/Oct/2025:15:10:14 +0300] "GET /health HTTP/1.1" 201 237 "-" "curl/8.0.1"
+192.168.1.176 - alice [01/Oct/2025:15:10:14 +0300] "PUT /api/v1/items/42 HTTP/2.0" 200 1191 "http://example.com/" "curl/8.0.1"

@@ -1,0 +1,5 @@
+192.168.1.165 - bob [01/Oct/2025:15:10:11 +0300] "PUT / HTTP/2.0" 201 4231 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.30 - bob [01/Oct/2025:15:10:11 +0300] "PUT /health HTTP/1.1" 302 3686 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.172 - - [01/Oct/2025:15:10:11 +0300] "DELETE /search?q=data HTTP/1.1" 200 3926 "https://google.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.142 - alice [01/Oct/2025:15:10:11 +0300] "GET /api/v1/items HTTP/1.1" 400 178 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.245 - bob [01/Oct/2025:15:10:11 +0300] "GET /health HTTP/2.0" 301 4686 "-" "Mozilla/5.0 (X11; Linux x86_64)"

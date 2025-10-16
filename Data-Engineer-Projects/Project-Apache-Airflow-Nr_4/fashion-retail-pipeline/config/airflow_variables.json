@@ -1,0 +1,7 @@
+{
+  "email_recipients": "alerts@fashionretail.com",
+  "slack_webhook": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+  "data_quality_threshold": "0.95",
+  "max_retry_delay": "300",
+  "notification_enabled": "true"
+}

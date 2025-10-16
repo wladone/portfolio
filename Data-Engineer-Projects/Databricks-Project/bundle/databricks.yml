@@ -1,0 +1,94 @@
+bundle:
+  name: global-electronics-lakehouse
+
+include:
+  - resources/*.yml
+
+resources:
+  volumes:
+    - name: landing
+      catalog_name: ${catalog}
+      schema_name: ${schema}
+      volume_type: MANAGED
+      comment: "Landing zone for raw data ingestion"
+
+    - name: bronze
+      catalog_name: ${catalog}
+      schema_name: ${schema}
+      volume_type: MANAGED
+      comment: "Bronze layer for raw ingested data"
+
+    - name: silver
+      catalog_name: ${catalog}
+      schema_name: ${schema}
+      volume_type: MANAGED
+      comment: "Silver layer for cleaned and transformed data"
+
+    - name: gold
+      catalog_name: ${catalog}
+      schema_name: ${schema}
+      volume_type: MANAGED
+      comment: "Gold layer for business-ready aggregates"
+
+  clusters:
+    - name: dlt-cluster
+      spark_version: "14.3.x-scala2.12"
+      node_type_id: "Standard_DS3_v2"
+      num_workers: 2
+      autotermination_minutes: 60
+      spark_conf:
+        spark.databricks.delta.optimizeWrite.enabled: "true"
+        spark.databricks.delta.autoCompact.enabled: "true"
+      spark_env_vars:
+        PYSPARK_PYTHON: "/databricks/python3/bin/python3"
+
+  pipelines:
+    - name: electronics-dlt-sql
+      libraries:
+        - notebook:
+            path: ../global_electronics_lakehouse/src/dlt/electronics_dlt.sql
+      configuration:
+        pipelines.electronics.source_inventory: "/Volumes/${catalog}/${schema}/landing/inventory"
+        pipelines.electronics.source_suppliers: "/Volumes/${catalog}/${schema}/landing/suppliers"
+        pipelines.electronics.kafka_bootstrap: "localhost:9092"
+        pipelines.electronics.kafka_topic: "global_electronics_sales"
+      cluster: ${resources.clusters.dlt-cluster.id}
+      development: true
+      continuous: false
+      channel: "PREVIEW"
+
+    - name: electronics-dlt-pyspark
+      libraries:
+        - file:
+            path: ../global_electronics_lakehouse/src/dlt/electronics_dlt.py
+      configuration:
+        pipelines.electronics.source_inventory: "/Volumes/${catalog}/${schema}/landing/inventory"
+        pipelines.electronics.source_suppliers: "/Volumes/${catalog}/${schema}/landing/suppliers"
+        pipelines.electronics.kafka_bootstrap: "localhost:9092"
+        pipelines.electronics.kafka_topic: "global_electronics_sales"
+      cluster: ${resources.clusters.dlt-cluster.id}
+      development: true
+      continuous: false
+      channel: "PREVIEW"
+
+targets:
+  dev:
+    mode: development
+    default: true
+    resources:
+      pipelines:
+        - electronics-dlt-sql
+        - electronics-dlt-pyspark
+    variables:
+      catalog: "dev_catalog"
+      schema: "electronics"
+
+  prod:
+    mode: production
+    resources:
+      pipelines:
+        - electronics-dlt-sql
+        - electronics-dlt-pyspark
+    variables:
+      catalog: "prod_catalog"
+      schema: "electronics"

@@ -1,0 +1,77 @@
+﻿bundle:
+  name: global-electronics-lakehouse
+
+artifacts:
+  dlt_sql:
+    type: notebook
+    path: ./src/dlt/electronics_dlt.sql
+  dlt_python:
+    type: notebook
+    path: ./src/dlt/electronics_dlt.py
+
+resources:
+  pipelines:
+    global_electronics_pipeline:
+      name: global-electronics-pipeline
+      edition: ADVANCED
+      photon: true
+      development: false
+      channel: CURRENT
+      catalog: main
+      target: electronics
+      configuration:
+        pipelines.electronics.source_inventory: /Volumes/main/landing/electronics/inventory/
+        pipelines.electronics.source_sales: /Volumes/main/landing/electronics/sales_stream/
+        pipelines.electronics.source_suppliers: /Volumes/main/landing/electronics/suppliers/
+        pipelines.electronics.kafka_bootstrap: localhost:9092
+      clusters:
+        - label: "default"
+          num_workers: 1
+          autoscale:
+            min_workers: 1
+            max_workers: 3
+          spark_conf:
+            spark.databricks.delta.optimizeWrite.enabled: "true"
+            spark.databricks.delta.autoCompact.enabled: "true"
+      libraries:
+        - notebook: ./src/dlt/electronics_dlt.sql
+
+  jobs:
+    gold_quality_check:
+      name: global-electronics-gold-check
+      tasks:
+        - task_key: gold_query
+          description: Validate gold inventory table has data
+          sql_task:
+            query:
+              file: ./queries/dashboard/top_selling_products.sql
+            warehouse_id: ${var.databricks_sql_warehouse}
+          schedule:
+            quartz_cron_expression: "0 0/15 * * * ?"
+            timezone_id: Europe/Bucharest
+
+variables:
+  databricks_sql_warehouse:
+    description: SQL Warehouse ID used for scheduled queries
+    default: YOUR_WAREHOUSE_ID
+
+targets:
+  dev:
+    workspace:
+      host: https://YOUR-DEV-HOST
+      root_path: /Workspace/Repos/you/global_electronics_lakehouse
+    resources:
+      pipelines:
+        global_electronics_pipeline:
+          configuration:
+            pipelines.electronics.kafka_bootstrap: localhost:9092
+  prod:
+    workspace:
+      host: https://YOUR-PROD-HOST
+      root_path: /Workspace/Repos/you/global_electronics_lakehouse
+    resources:
+      pipelines:
+        global_electronics_pipeline:
+          development: false
+          configuration:
+            pipelines.electronics.kafka_bootstrap: YOUR_PROD_BOOTSTRAP:9092

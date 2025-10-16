@@ -1,0 +1,21 @@
+﻿{
+  "type": "struct",
+  "fields": [
+    {"name": "event_id", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "event_time", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "order_id", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "product_id", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "warehouse_code", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "channel", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "payment_type", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "customer_id", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "quantity", "type": "integer", "nullable": false, "metadata": {}},
+    {"name": "unit_price_euro", "type": "double", "nullable": false, "metadata": {}},
+    {"name": "discount_rate", "type": "double", "nullable": true, "metadata": {}},
+    {"name": "currency", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "sales_channel_region", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "promotion_code", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "is_priority_order", "type": "boolean", "nullable": true, "metadata": {}},
+    {"name": "device_type", "type": "string", "nullable": true, "metadata": {}}
+  ]
+}

@@ -1,0 +1,14 @@
+FROM python:3.9-slim
+
+# Install dependencies
+COPY docker/requirements.txt /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt
+
+# Copy validation script
+COPY scripts/validate_data_quality.py /validate_data_quality.py
+
+# Set working directory
+WORKDIR /
+
+# Default command
+CMD ["python", "/validate_data_quality.py"]

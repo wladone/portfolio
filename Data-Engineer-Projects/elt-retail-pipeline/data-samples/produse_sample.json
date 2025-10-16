@@ -1,0 +1,7 @@
+[
+  {"id": 1, "title": "T-Shirt Cotton", "price": 19.99, "category": "clothing"},
+  {"id": 2, "title": "USB-C Cable 1m", "price": 5.49, "category": "electronics"},
+  {"id": 3, "title": "Coffee Mug 300ml", "price": 12.75, "category": "home"},
+  {"id": 4, "title": "Wireless Mouse", "price": 49.9, "category": "electronics"}
+]
+

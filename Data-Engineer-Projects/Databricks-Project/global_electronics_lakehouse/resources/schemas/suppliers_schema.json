@@ -1,0 +1,17 @@
+﻿{
+  "type": "struct",
+  "fields": [
+    {"name": "supplier_id", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "supplier_name", "type": "string", "nullable": false, "metadata": {}},
+    {"name": "rating", "type": "double", "nullable": false, "metadata": {}},
+    {"name": "lead_time_days", "type": "integer", "nullable": false, "metadata": {}},
+    {"name": "preferred", "type": "boolean", "nullable": false, "metadata": {}},
+    {"name": "contact_email", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "phone", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "country", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "category_focus", "type": {"type": "array", "elementType": "string", "containsNull": false}, "nullable": true, "metadata": {}},
+    {"name": "contract_start", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "contract_end", "type": "string", "nullable": true, "metadata": {}},
+    {"name": "annual_capacity_units", "type": "integer", "nullable": true, "metadata": {}}
+  ]
+}

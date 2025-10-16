@@ -1,0 +1,5 @@
+192.168.1.171 - - [01/Oct/2025:15:07:15 +0300] "GET /api/v1/items/42 HTTP/2.0" 404 4804 "https://google.com/" "curl/8.0.1"
+192.168.1.44 - alice [01/Oct/2025:15:07:15 +0300] "PUT / HTTP/1.1" 401 73 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.168 - - [01/Oct/2025:15:07:15 +0300] "DELETE /login HTTP/2.0" 404 1384 "http://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.91 - alice [01/Oct/2025:15:07:15 +0300] "POST /health HTTP/2.0" 503 4101 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.85 - - [01/Oct/2025:15:07:15 +0300] "DELETE /health HTTP/2.0" 404 3432 "https://google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"

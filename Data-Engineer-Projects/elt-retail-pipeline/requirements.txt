@@ -1,0 +1,17 @@
+# Core
+pandas==2.2.2
+requests==2.32.3
+python-dotenv==1.0.1
+
+# MySQL
+mysql-connector-python==9.0.0
+
+# Airflow (opțional pentru orchestrare locală)
+apache-airflow==2.9.2
+
+# GCP client (opțional pentru verificări)
+google-cloud-bigquery==3.25.0
+
+# Spark local (pe Databricks nu se instalează via pip)
+pyspark==3.5.1
+

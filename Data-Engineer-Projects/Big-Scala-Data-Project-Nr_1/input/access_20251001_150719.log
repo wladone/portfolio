@@ -1,0 +1,5 @@
+192.168.1.208 - bob [01/Oct/2025:15:07:19 +0300] "GET /health HTTP/1.1" 503 627 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.180 - bob [01/Oct/2025:15:07:19 +0300] "GET /login HTTP/2.0" 200 4658 "https://google.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.116 - alice [01/Oct/2025:15:07:19 +0300] "GET /search?q=data HTTP/2.0" 401 2610 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.209 - - [01/Oct/2025:15:07:19 +0300] "POST / HTTP/1.1" 302 1631 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.236 - bob [01/Oct/2025:15:07:19 +0300] "GET /api/v1/items HTTP/1.1" 401 1087 "http://example.com/" "curl/8.0.1"

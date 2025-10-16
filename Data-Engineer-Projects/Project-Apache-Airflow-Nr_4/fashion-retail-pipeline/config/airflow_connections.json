@@ -1,0 +1,32 @@
+[
+  {
+    "conn_id": "s3_retail_conn",
+    "conn_type": "aws",
+    "host": null,
+    "schema": null,
+    "login": "minioadmin",
+    "password": "minioadmin",
+    "port": null,
+    "extra": "{\"endpoint_url\": \"http://minio:9000\", \"aws_access_key_id\": \"minioadmin\", \"aws_secret_access_key\": \"minioadmin\", \"region_name\": \"us-east-1\"}"
+  },
+  {
+    "conn_id": "duckdb_retail_conn",
+    "conn_type": "duckdb",
+    "host": "/data/warehouse.duckdb",
+    "schema": null,
+    "login": null,
+    "password": null,
+    "port": null,
+    "extra": null
+  },
+  {
+    "conn_id": "snowflake_retail_conn",
+    "conn_type": "snowflake",
+    "host": "your_account.region.snowflakecomputing.com",
+    "schema": "RETAIL_SCHEMA",
+    "login": "your_snowflake_user",
+    "password": "your_snowflake_password",
+    "port": null,
+    "extra": "{\"warehouse\": \"FASHION_RETAIL_WH\", \"database\": \"FASHION_RETAIL_DB\"}"
+  }
+]

@@ -1,0 +1,402 @@
+{
+  "displayName": "E-commerce Streaming Pipeline - Comprehensive Dashboard",
+  "dashboardFilters": [
+    {
+      "filterType": "RESOURCE_LABEL",
+      "labelKey": "project_id",
+      "stringValue": "${PROJECT_ID}",
+      "templateVariable": "Project"
+    }
+  ],
+  "gridLayout": {
+    "columns": 4,
+    "widgets": [
+      {
+        "title": "🚀 Pipeline Overview",
+        "xyChart": {
+          "chartOptions": {
+            "mode": "COLOR"
+          },
+          "dataSets": [
+            {
+              "legendTemplate": "Events/Second",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"dataflow.googleapis.com/job/element_count\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_RATE",
+                    "crossSeriesReducer": "REDUCE_SUM"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 0,
+          "yPos": 0,
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "title": "💰 Cost Overview",
+        "xyChart": {
+          "chartOptions": {
+            "mode": "COLOR"
+          },
+          "dataSets": [
+            {
+              "legendTemplate": "Daily Cost ($)",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"custom.googleapis.com/pipeline/daily_cost\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "86400s",
+                    "perSeriesAligner": "ALIGN_SUM"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 2,
+          "yPos": 0,
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "title": "🔍 Data Quality Score",
+        "xyChart": {
+          "chartOptions": {
+            "mode": "COLOR"
+          },
+          "dataSets": [
+            {
+              "legendTemplate": "Quality Score (%)",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"custom.googleapis.com/data_quality/score\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "300s",
+                    "perSeriesAligner": "ALIGN_MEAN"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 0,
+          "yPos": 2,
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "title": "⚡ System Health",
+        "scorecard": {
+          "timeSeriesQuery": {
+            "timeSeriesFilter": {
+              "filter": "metric.type=\"custom.googleapis.com/pipeline/health_score\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+              "aggregation": {
+                "alignmentPeriod": "60s",
+                "perSeriesAligner": "ALIGN_MEAN"
+              }
+            }
+          },
+          "thresholds": [
+            {
+              "label": "Unhealthy",
+              "value": 0.5,
+              "color": "RED"
+            },
+            {
+              "label": "Degraded",
+              "value": 0.8,
+              "color": "YELLOW"
+            },
+            {
+              "label": "Healthy",
+              "value": 0.95,
+              "color": "GREEN"
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 2,
+          "yPos": 2,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "title": "📊 Error Rate Trend",
+        "xyChart": {
+          "chartOptions": {
+            "mode": "COLOR"
+          },
+          "dataSets": [
+            {
+              "legendTemplate": "Error Rate (%)",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"dataflow.googleapis.com/job/error_count\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "300s",
+                    "perSeriesAligner": "ALIGN_RATE",
+                    "crossSeriesReducer": "REDUCE_SUM"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 3,
+          "yPos": 2,
+          "width": 1,
+          "height": 1
+        }
+      },
+      {
+        "title": "🔄 Processing Latency",
+        "xyChart": {
+          "chartOptions": {
+            "mode": "COLOR"
+          },
+          "dataSets": [
+            {
+              "legendTemplate": "P50 Latency (ms)",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"custom.googleapis.com/pipeline/processing_latency\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_PERCENTILE_50"
+                  }
+                }
+              }
+            },
+            {
+              "legendTemplate": "P95 Latency (ms)",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"custom.googleapis.com/pipeline/processing_latency\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_PERCENTILE_95"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 0,
+          "yPos": 4,
+          "width": 4,
+          "height": 2
+        }
+      },
+      {
+        "title": "📈 Throughput by Event Type",
+        "xyChart": {
+          "chartOptions": {
+            "mode": "COLOR"
+          },
+          "dataSets": [
+            {
+              "legendTemplate": "Click Events/sec",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"custom.googleapis.com/events/clicks_per_second\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_RATE"
+                  }
+                }
+              }
+            },
+            {
+              "legendTemplate": "Transaction Events/sec",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"custom.googleapis.com/events/transactions_per_second\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_RATE"
+                  }
+                }
+              }
+            },
+            {
+              "legendTemplate": "Stock Events/sec",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"custom.googleapis.com/events/stock_per_second\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_RATE"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 0,
+          "yPos": 6,
+          "width": 4,
+          "height": 2
+        }
+      },
+      {
+        "title": "💾 Resource Utilization",
+        "xyChart": {
+          "chartOptions": {
+            "mode": "COLOR"
+          },
+          "dataSets": [
+            {
+              "legendTemplate": "CPU Utilization (%)",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"compute.googleapis.com/instance/cpu/utilization\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_MEAN",
+                    "crossSeriesReducer": "REDUCE_MEAN"
+                  }
+                }
+              }
+            },
+            {
+              "legendTemplate": "Memory Utilization (%)",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"compute.googleapis.com/instance/memory/utilization\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "60s",
+                    "perSeriesAligner": "ALIGN_MEAN",
+                    "crossSeriesReducer": "REDUCE_MEAN"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 0,
+          "yPos": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "title": "🔍 Dead Letter Queue",
+        "xyChart": {
+          "chartOptions": {
+            "mode": "COLOR"
+          },
+          "dataSets": [
+            {
+              "legendTemplate": "DLQ Messages",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"custom.googleapis.com/pipeline/dead_letter_count\" AND resource.labels.project_id=\"${PROJECT_ID}\"",
+                  "aggregation": {
+                    "alignmentPeriod": "300s",
+                    "perSeriesAligner": "ALIGN_SUM"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "layout": {
+          "xPos": 2,
+          "yPos": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      {
+        "title": "📋 Recent Alerts",
+        "alertChart": {
+          "alertChartOption": {
+            "placement": "ALERT_CHART_OPTION_PLACEMENT_BOTTOM"
+          }
+        },
+        "layout": {
+          "xPos": 0,
+          "yPos": 10,
+          "width": 4,
+          "height": 2
+        }
+      }
+    ]
+  },
+  "mosaicLayout": {
+    "columns": 4,
+    "tiles": [
+      {
+        "xPos": 0,
+        "yPos": 0,
+        "width": 2,
+        "height": 2,
+        "widget": {
+          "title": "Pipeline Performance Summary",
+          "text": {
+            "content": "## 🚀 Pipeline Performance\n\n**Key Metrics:**\n- Throughput: Real-time events/second\n- Latency: P50/P95 processing times\n- Error Rate: Percentage of failed events\n- Data Quality: Validation success rate\n\n**Health Indicators:**\n- 🟢 Green: All systems operational\n- 🟡 Yellow: Minor issues detected\n- 🔴 Red: Critical issues require attention",
+            "format": "MARKDOWN"
+          }
+        }
+      },
+      {
+        "xPos": 2,
+        "yPos": 0,
+        "width": 2,
+        "height": 2,
+        "widget": {
+          "title": "Cost & Budget Status",
+          "text": {
+            "content": "## 💰 Cost Management\n\n**Current Status:**\n- Daily Cost: $${DAILY_COST}\n- Monthly Budget: $${MONTHLY_BUDGET}\n- Utilization: {BUDGET_UTILIZATION}%\n\n**Cost Breakdown:**\n- Dataflow: $${DATAFLOW_COST}\n- BigQuery: $${BIGQUERY_COST}\n- Bigtable: $${BIGTABLE_COST}\n- Other: $${OTHER_COST}\n\n**Alerts:**\n- 🟢 On track\n- 🟡 Approaching limit\n- 🔴 Over budget",
+            "format": "MARKDOWN"
+          }
+        }
+      }
+    ]
+  },
+  "columnLayout": {
+    "columns": [
+      {
+        "weight": 1,
+        "widgets": [
+          {
+            "title": "📈 Real-time Metrics",
+            "text": {
+              "content": "Real-time performance metrics and system health indicators",
+              "format": "MARKDOWN"
+            }
+          }
+        ]
+      },
+      {
+        "weight": 1,
+        "widgets": [
+          {
+            "title": "🔧 Quick Actions",
+            "text": {
+              "content": "## Quick Actions\n\n[Start Pipeline](run:pipeline:start)\n[Stop Pipeline](run:pipeline:stop)\n[View Logs](run:logs:view)\n[Run Health Check](run:health:check)\n[Generate Report](run:report:generate)",
+              "format": "MARKDOWN"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

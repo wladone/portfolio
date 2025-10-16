@@ -1,0 +1,13 @@
+LICENSE
+README.md
+pyproject.toml
+src/regatta_to_powerbi/__init__.py
+src/regatta_to_powerbi/cli.py
+src/regatta_to_powerbi/transform.py
+src/regatta_to_powerbi.egg-info/PKG-INFO
+src/regatta_to_powerbi.egg-info/SOURCES.txt
+src/regatta_to_powerbi.egg-info/dependency_links.txt
+src/regatta_to_powerbi.egg-info/entry_points.txt
+src/regatta_to_powerbi.egg-info/requires.txt
+src/regatta_to_powerbi.egg-info/top_level.txt
+tests/test_transform.py

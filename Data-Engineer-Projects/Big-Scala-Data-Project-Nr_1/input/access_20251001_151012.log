@@ -1,0 +1,5 @@
+192.168.1.236 - bob [01/Oct/2025:15:10:12 +0300] "PUT /api/v1/items/42 HTTP/1.1" 204 2557 "https://google.com/" "curl/8.0.1"
+192.168.1.123 - alice [01/Oct/2025:15:10:12 +0300] "PUT / HTTP/1.1" 404 2368 "http://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.16 - frank [01/Oct/2025:15:10:12 +0300] "GET /search?q=data HTTP/2.0" 403 2859 "-" "curl/8.0.1"
+192.168.1.75 - - [01/Oct/2025:15:10:12 +0300] "PUT /search?q=data HTTP/1.1" 401 4728 "http://example.com/" "curl/8.0.1"
+192.168.1.4 - alice [01/Oct/2025:15:10:12 +0300] "PUT / HTTP/1.1" 200 641 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"

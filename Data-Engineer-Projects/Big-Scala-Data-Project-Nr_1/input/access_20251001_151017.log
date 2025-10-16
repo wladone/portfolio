@@ -1,0 +1,5 @@
+192.168.1.58 - - [01/Oct/2025:15:10:17 +0300] "GET /health HTTP/1.1" 200 1936 "https://google.com/" "curl/8.0.1"
+192.168.1.184 - alice [01/Oct/2025:15:10:17 +0300] "POST /index.html HTTP/2.0" 401 3118 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.127 - frank [01/Oct/2025:15:10:17 +0300] "PUT /index.html HTTP/2.0" 200 117 "http://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.197 - alice [01/Oct/2025:15:10:17 +0300] "GET /index.html HTTP/1.1" 204 4981 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.61 - frank [01/Oct/2025:15:10:17 +0300] "DELETE /login HTTP/1.1" 204 1267 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"

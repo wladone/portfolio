@@ -1,0 +1,5 @@
+192.168.1.127 - - [01/Oct/2025:15:10:09 +0300] "POST /search?q=data HTTP/1.1" 201 1890 "http://example.com/" "curl/8.0.1"
+192.168.1.140 - frank [01/Oct/2025:15:10:09 +0300] "PUT /login HTTP/1.1" 503 3724 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.149 - frank [01/Oct/2025:15:10:09 +0300] "PUT /index.html HTTP/1.1" 404 4848 "https://google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.155 - bob [01/Oct/2025:15:10:09 +0300] "PUT /index.html HTTP/1.1" 401 3078 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.170 - frank [01/Oct/2025:15:10:09 +0300] "GET /health HTTP/1.1" 204 4129 "https://google.com/" "curl/8.0.1"

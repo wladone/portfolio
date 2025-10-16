@@ -1,0 +1,22 @@
+{
+  "displayName": "Dataflow Low Throughput",
+  "combiner": "OR",
+  "conditions": [
+    {
+      "displayName": "Views rows emitted below threshold",
+      "conditionThreshold": {
+        "filter": "metric.type=\"dataflow.googleapis.com/job/metric_count\" AND resource.type=\"dataflow_job\" AND metric.label.metric_name=\"ecommerce_pipeline_views_rows_emitted\"",
+        "duration": "0s",
+        "comparison": "COMPARISON_LT",
+        "thresholdValue": 1,
+        "trigger": {"count": 1},
+        "aggregation": {
+          "alignmentPeriod": "600s",
+          "perSeriesAligner": "ALIGN_RATE",
+          "crossSeriesReducer": "REDUCE_SUM"
+        }
+      }
+    }
+  ],
+  "notificationChannels": []
+}

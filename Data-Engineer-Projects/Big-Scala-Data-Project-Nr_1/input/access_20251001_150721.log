@@ -1,0 +1,5 @@
+192.168.1.103 - - [01/Oct/2025:15:07:21 +0300] "DELETE / HTTP/1.1" 401 3138 "https://google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.157 - bob [01/Oct/2025:15:07:21 +0300] "POST /index.html HTTP/1.1" 404 3855 "https://google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.54 - bob [01/Oct/2025:15:07:21 +0300] "PUT /api/v1/items HTTP/1.1" 401 2997 "http://example.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.148 - bob [01/Oct/2025:15:07:21 +0300] "DELETE /login HTTP/1.1" 401 2157 "http://example.com/" "curl/8.0.1"
+192.168.1.40 - alice [01/Oct/2025:15:07:21 +0300] "DELETE /search?q=data HTTP/1.1" 502 85 "-" "curl/8.0.1"

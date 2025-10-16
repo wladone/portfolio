@@ -1,0 +1,5 @@
+192.168.1.61 - alice [01/Oct/2025:15:07:10 +0300] "PUT /login HTTP/2.0" 200 2319 "http://example.com/" "curl/8.0.1"
+192.168.1.214 - alice [01/Oct/2025:15:07:10 +0300] "GET /login HTTP/2.0" 200 3655 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.225 - - [01/Oct/2025:15:07:10 +0300] "DELETE /login HTTP/2.0" 404 2165 "-" "curl/8.0.1"
+192.168.1.95 - - [01/Oct/2025:15:07:10 +0300] "DELETE /index.html HTTP/2.0" 200 3063 "http://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.140 - frank [01/Oct/2025:15:07:10 +0300] "PUT /api/v1/items HTTP/2.0" 404 3937 "https://google.com/" "curl/8.0.1"

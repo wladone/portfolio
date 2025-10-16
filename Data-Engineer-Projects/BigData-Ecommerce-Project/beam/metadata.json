@@ -1,0 +1,86 @@
+﻿{
+  "name": "Real-time E-commerce Streaming Pipeline",
+  "description": "Ingests click, transaction, and stock events from Pub/Sub, aggregates with Apache Beam, writes to BigQuery and Cloud Bigtable, and routes invalid messages to a dead-letter topic.",
+  "parameters": [
+    {
+      "name": "input_topic_clicks",
+      "label": "Pub/Sub Topic - Clicks",
+      "helpText": "Fully qualified Pub/Sub topic for product view events.",
+      "paramType": "TEXT",
+      "isOptional": false
+    },
+    {
+      "name": "input_topic_transactions",
+      "label": "Pub/Sub Topic - Transactions",
+      "helpText": "Fully qualified Pub/Sub topic for transaction events.",
+      "paramType": "TEXT",
+      "isOptional": false
+    },
+    {
+      "name": "input_topic_stock",
+      "label": "Pub/Sub Topic - Stock",
+      "helpText": "Fully qualified Pub/Sub topic for stock adjustment events.",
+      "paramType": "TEXT",
+      "isOptional": false
+    },
+    {
+      "name": "dead_letter_topic",
+      "label": "Dead-letter Topic",
+      "helpText": "Fully qualified Pub/Sub topic that receives validation failures.",
+      "paramType": "TEXT",
+      "isOptional": false
+    },
+    {
+      "name": "output_bigquery_dataset",
+      "label": "BigQuery Dataset",
+      "helpText": "Dataset that stores product views, sales, and inventory tables.",
+      "paramType": "TEXT",
+      "isOptional": false
+    },
+    {
+      "name": "output_table_views",
+      "label": "BigQuery Table - Views",
+      "helpText": "Table name for product views summary results.",
+      "paramType": "TEXT",
+      "isOptional": true,
+      "defaultValue": "product_views_summary"
+    },
+    {
+      "name": "output_table_sales",
+      "label": "BigQuery Table - Sales",
+      "helpText": "Table name for sales summary results.",
+      "paramType": "TEXT",
+      "isOptional": true,
+      "defaultValue": "sales_summary"
+    },
+    {
+      "name": "output_table_stock",
+      "label": "BigQuery Table - Stock",
+      "helpText": "Table name for inventory summary results.",
+      "paramType": "TEXT",
+      "isOptional": true,
+      "defaultValue": "inventory_summary"
+    },
+    {
+      "name": "bigtable_project",
+      "label": "Bigtable Project",
+      "helpText": "Google Cloud project that hosts the Cloud Bigtable instance.",
+      "paramType": "TEXT",
+      "isOptional": false
+    },
+    {
+      "name": "bigtable_instance",
+      "label": "Bigtable Instance",
+      "helpText": "Cloud Bigtable instance ID for storing product stats.",
+      "paramType": "TEXT",
+      "isOptional": false
+    },
+    {
+      "name": "bigtable_table",
+      "label": "Bigtable Table",
+      "helpText": "Cloud Bigtable table ID for product stats (expects column family 'stats').",
+      "paramType": "TEXT",
+      "isOptional": false
+    }
+  ]
+}

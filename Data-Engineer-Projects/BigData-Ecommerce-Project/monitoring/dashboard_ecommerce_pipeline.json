@@ -1,0 +1,98 @@
+{
+  "displayName": "Ecommerce Streaming Pipeline",
+  "gridLayout": {
+    "columns": 2,
+    "widgets": [
+      {
+        "title": "Dataflow - Elements Processed per Minute",
+        "xyChart": {
+          "chartOptions": {"mode": "COLOR"},
+          "dataSets": [
+            {
+              "plotType": "LINE",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"dataflow.googleapis.com/job/element_count\" AND resource.type=\"dataflow_job\"",
+                  "aggregation": {
+                    "alignmentPeriod": "300s",
+                    "perSeriesAligner": "ALIGN_RATE",
+                    "crossSeriesReducer": "REDUCE_SUM",
+                    "groupByFields": ["resource.label.job_name"]
+                  }
+                }
+              }
+            }
+          ],
+          "yAxis": {"label": "Elements/min", "scale": "LINEAR"}
+        }
+      },
+      {
+        "title": "Dead-letter Messages (Beam Metrics)",
+        "xyChart": {
+          "chartOptions": {"mode": "COLOR"},
+          "dataSets": [
+            {
+              "plotType": "LINE",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"dataflow.googleapis.com/job/metric_count\" AND resource.type=\"dataflow_job\" AND metric.label.metric_name=\"ecommerce_pipeline_click_invalid\"",
+                  "aggregation": {
+                    "alignmentPeriod": "300s",
+                    "perSeriesAligner": "ALIGN_MEAN",
+                    "crossSeriesReducer": "REDUCE_SUM"
+                  }
+                }
+              }
+            }
+          ],
+          "yAxis": {"label": "Invalid Messages", "scale": "LINEAR"}
+        }
+      },
+      {
+        "title": "Rows Emitted per Sink",
+        "xyChart": {
+          "chartOptions": {"mode": "COLOR"},
+          "dataSets": [
+            {
+              "plotType": "LINE",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"dataflow.googleapis.com/job/metric_count\" AND resource.type=\"dataflow_job\" AND (metric.label.metric_name=~\"ecommerce_pipeline_(views|sales|stock)_rows_emitted\")",
+                  "aggregation": {
+                    "alignmentPeriod": "300s",
+                    "perSeriesAligner": "ALIGN_RATE",
+                    "crossSeriesReducer": "REDUCE_SUM",
+                    "groupByFields": ["metric.label.metric_name"]
+                  }
+                }
+              }
+            }
+          ],
+          "yAxis": {"label": "Rows/min", "scale": "LINEAR"}
+        }
+      },
+      {
+        "title": "View Count Distribution",
+        "xyChart": {
+          "chartOptions": {"mode": "COLOR"},
+          "dataSets": [
+            {
+              "plotType": "LINE",
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"dataflow.googleapis.com/job/metric_distribution\" AND resource.type=\"dataflow_job\" AND metric.label.metric_name=\"ecommerce_pipeline_views_per_window\"",
+                  "aggregation": {
+                    "alignmentPeriod": "300s",
+                    "perSeriesAligner": "ALIGN_PERCENTILE_95",
+                    "crossSeriesReducer": "REDUCE_MEAN"
+                  }
+                }
+              }
+            }
+          ],
+          "yAxis": {"label": "Views (p95)", "scale": "LINEAR"}
+        }
+      }
+    ]
+  }
+}

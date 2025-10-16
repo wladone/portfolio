@@ -1,0 +1,5 @@
+ID_vanzare,Data,ID_produs,ID_client,Cantitate,Pret_unitar,Total_vanzare
+1001,2025-09-01,1,1,2,19.99,39.98
+1002,2025-09-02,2,3,1,5.49,5.49
+1003,2025-09-03,4,2,1,49.9,49.9
+

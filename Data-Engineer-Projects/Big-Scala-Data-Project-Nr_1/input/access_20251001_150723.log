@@ -1,0 +1,5 @@
+192.168.1.87 - alice [01/Oct/2025:15:07:23 +0300] "DELETE /index.html HTTP/1.1" 204 1511 "https://google.com/" "curl/8.0.1"
+192.168.1.53 - bob [01/Oct/2025:15:07:23 +0300] "DELETE /search?q=data HTTP/1.1" 200 2772 "https://google.com/" "curl/8.0.1"
+192.168.1.54 - frank [01/Oct/2025:15:07:23 +0300] "POST /index.html HTTP/2.0" 200 956 "http://example.com/" "curl/8.0.1"
+192.168.1.10 - frank [01/Oct/2025:15:07:23 +0300] "GET /login HTTP/1.1" 503 4883 "http://example.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.91 - bob [01/Oct/2025:15:07:23 +0300] "POST / HTTP/1.1" 401 1452 "https://google.com/" "curl/8.0.1"

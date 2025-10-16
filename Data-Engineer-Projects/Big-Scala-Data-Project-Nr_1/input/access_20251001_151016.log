@@ -1,0 +1,5 @@
+192.168.1.15 - - [01/Oct/2025:15:10:16 +0300] "POST /index.html HTTP/1.1" 302 1538 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.127 - alice [01/Oct/2025:15:10:16 +0300] "GET /index.html HTTP/2.0" 204 777 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.100 - - [01/Oct/2025:15:10:16 +0300] "DELETE /search?q=data HTTP/1.1" 200 3910 "-" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.151 - - [01/Oct/2025:15:10:16 +0300] "PUT /index.html HTTP/1.1" 200 3400 "https://google.com/" "Mozilla/5.0 (X11; Linux x86_64)"
+192.168.1.145 - frank [01/Oct/2025:15:10:16 +0300] "DELETE /index.html HTTP/1.1" 204 1956 "https://google.com/" "Mozilla/5.0 (X11; Linux x86_64)"

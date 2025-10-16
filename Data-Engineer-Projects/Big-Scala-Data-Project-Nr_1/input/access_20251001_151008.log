@@ -1,0 +1,5 @@
+192.168.1.120 - frank [01/Oct/2025:15:10:08 +0300] "DELETE / HTTP/1.1" 201 29 "https://google.com/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.249 - alice [01/Oct/2025:15:10:08 +0300] "DELETE /login HTTP/2.0" 400 4376 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+192.168.1.23 - frank [01/Oct/2025:15:10:08 +0300] "GET /login HTTP/1.1" 302 4496 "https://google.com/" "curl/8.0.1"
+192.168.1.114 - - [01/Oct/2025:15:10:08 +0300] "POST /index.html HTTP/1.1" 204 3323 "https://google.com/" "curl/8.0.1"
+192.168.1.145 - alice [01/Oct/2025:15:10:08 +0300] "PUT /login HTTP/2.0" 302 2307 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
