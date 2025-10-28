@@ -1,0 +1,22 @@
+rng_seed: 424242
+start_date: 2023-01-01
+end_date: 2025-12-31
+n_customers: 2000
+n_products: 1000
+n_orders: 10000
+file_split_orders: 5000
+file_split_customers: 2000
+currency_pool: ["RON", "EUR"]
+channel_weights:
+  web: 0.6
+  mobile: 0.3
+  store: 0.1
+missingness:
+  email: 0.08
+  phone: 0.12
+outliers:
+  high_quantity_rate: 0.01
+  high_discount_rate: 0.02
+price:
+  base_mu: 3.5
+  base_sigma: 0.6

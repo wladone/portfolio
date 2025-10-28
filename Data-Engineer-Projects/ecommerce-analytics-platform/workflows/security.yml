@@ -1,0 +1,56 @@
+name: Security Scan
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    security_scan:
+        name: Security Scan
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            security-events: write
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.11"
+
+            - name: Install poetry
+              run: |
+                  curl -sSL https://install.python-poetry.org | python3 -
+
+            - name: Install dependencies
+              run: poetry install
+
+            - name: Run detect-secrets
+              run: |
+                  poetry run detect-secrets scan --baseline .secrets.baseline .
+
+            - name: Run Gitleaks
+              uses: gitleaks/gitleaks-action@v2
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Run Bandit
+              run: poetry run bandit -q -r . -x tests -f json -o bandit-report.json
+
+            - name: Generate SBOM
+              run: |
+                  poetry export -f requirements.txt --without-hashes -o requirements.txt
+                  poetry run cyclonedx-bom -r -o sbom-python.xml
+
+            - name: Archive security results
+              uses: actions/upload-artifact@v4
+              with:
+                  name: security-reports
+                  path: |
+                      bandit-report.json
+                      sbom-python.xml
+                      gitleaks-report.json

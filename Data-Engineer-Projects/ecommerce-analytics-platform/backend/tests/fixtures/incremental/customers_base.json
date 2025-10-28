@@ -1,0 +1,11 @@
+[
+  {
+    "customer_nk": "CUST-001",
+    "email": "alice@example.com",
+    "first_name": "Alice",
+    "last_name": "Pop",
+    "phone": "+40111222333",
+    "country_code": "RO",
+    "updated_at": "2024-01-01T00:00:00Z"
+  }
+]
