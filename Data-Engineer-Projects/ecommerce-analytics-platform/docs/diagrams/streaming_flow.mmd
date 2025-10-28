@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant K as Kafka
+    participant R as KafkaReader
+    participant W as orders_worker
+    participant D as DW (PostgreSQL)
+    participant C as Redis Cache
+
+    K->>R: consume event batch
+    activate R
+    R->>R: normalize JSON
+    R->>W: handle_orders_batch()
+    activate W
+    W->>D: upsert dim_customers/dim_products
+    W->>D: insert fact_sales
+    W->>R: ack(last_offset)
+    R->>K: commit offset
+    W->>C: invalidate sales:*
+    deactivate W
+    deactivate R
+
+    note over R,W: Kafka metrics:<br/>- partitions<br/>- commits<br/>- poll size<br/>- lag

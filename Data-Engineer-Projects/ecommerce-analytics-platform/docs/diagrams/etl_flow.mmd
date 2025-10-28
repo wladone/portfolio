@@ -1,0 +1,82 @@
+```mermaid
+flowchart TD
+    subgraph Sources
+        A[Raw Orders JSON]
+        B[Customer Master JSON]
+        C[Product Catalog CSV]
+    end
+
+    subgraph Staging["stg schema (JSONB + payload_hash)"]
+        STG_ORD[stg.orders_raw]
+        STG_CUST[stg.customers_raw]
+        STG_PROD[stg.products_raw]
+    end
+
+    subgraph Dedup["SHA-256 Dedup"]
+        DEDUP_ORD[orders hash]
+        DEDUP_CUST[customers hash]
+        DEDUP_PROD[products hash]
+    end
+
+    subgraph Warehouse["dw schema"]
+        D1[dim_customer]
+        D2[dim_product]
+        D3[dim_channel]
+        D4[dim_date]
+        F[fact_sales]
+    end
+
+    subgraph Meta["meta schema"]
+        AUD[etl_audit]
+        FP[dim_fingerprint]
+        CDC[cdc_state]
+    end
+
+    subgraph Views["Analytical Views"]
+        V1[v_daily_sales_summary]
+        V2[v_product_affinity (materialized)]
+    end
+
+    A --> STG_ORD --> DEDUP_ORD --> F
+    B --> STG_CUST --> DEDUP_CUST --> D1
+    C --> STG_PROD --> DEDUP_PROD --> D2
+
+    SEED[Seed Scripts] --> D3
+    SEED --> D4
+    SEED --> AUD
+
+    D1 --> F
+    D2 --> F
+    D3 --> F
+    D4 --> F
+
+    F --> V1
+    F --> V2
+
+    V1 --> Consumers[(APIs and Dashboards)]
+    V2 --> Recs[(ALS Training)]
+
+    ETL[[Batch ETL Jobs]] -.-> AUD
+    ETL -.-> STG_ORD
+    ETL -.-> STG_CUST
+    ETL -.-> STG_PROD
+
+    INC[[Incremental Jobs]] -.-> STG_ORD
+    INC -.-> STG_CUST
+    INC -.-> STG_PROD
+    INC -.-> D1
+    INC -.-> D2
+    INC -.-> F
+    INC -.-> FP
+    INC -.-> CDC
+    INC -.-> AUD
+
+    subgraph Streaming["Streaming (light)"]
+        KAFKA[(Kafka Topics)]
+        FILE[(File Tail)]
+        STREAM_WORKER[[Orders Worker]]
+    end
+
+    KAFKA --> STREAM_WORKER --> F
+    FILE --> STREAM_WORKER
+```

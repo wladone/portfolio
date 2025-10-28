@@ -1,0 +1,36 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.so
+*.dylib
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# Tooling caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Editors
+.idea/
+.vscode/
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Distribution
+build/
+dist/
+
+# OS
+Thumbs.db
+*.DS_Store
+infra/seed/data/

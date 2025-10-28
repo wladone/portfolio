@@ -1,0 +1,48 @@
+graph TD
+    %% Sources
+    S1[Raw Orders] -->|CDC| STG1[stg.orders]
+    S2[Raw Products] -->|CDC| STG2[stg.products]
+    S3[Raw Customers] -->|CDC| STG3[stg.customers]
+
+    %% Staging to Dimensions/Facts
+    STG1 -->|Validated| F1[dw.fact_orders]
+    STG2 -->|Deduped| D1[dw.dim_products]
+    STG3 -->|Hashed PII| D2[dw.dim_customers]
+
+    %% Views
+    F1 --> V1[dw.v_daily_sales_summary]
+    F1 --> V2[dw.v_user_orders]
+    D1 --> V1
+    D2 --> V2
+
+    %% APIs & Cache
+    V1 --> API1[/api/v1/sales/summary]
+    V2 --> API2[/api/v1/user/orders]
+    API1 --> C1[Redis Cache]
+    API2 --> C2[Redis Cache]
+
+    %% ML Pipeline
+    F1 --> ML1[ALS Training]
+    ML1 --> ML2[Model Artifacts]
+    ML2 --> API3[/api/v1/recs]
+    API3 --> C3[Redis Cache]
+
+    %% Monitoring
+    F1 --> M1[ETL Metrics]
+    API1 & API2 & API3 --> M2[API Metrics]
+    C1 & C2 & C3 --> M3[Cache Metrics]
+
+    %% Style definitions
+    classDef source fill:#f9f,stroke:#333
+    classDef staging fill:#fcf,stroke:#333
+    classDef dw fill:#cff,stroke:#333
+    classDef api fill:#ffc,stroke:#333
+    classDef cache fill:#dfd,stroke:#333
+    classDef metrics fill:#ddd,stroke:#333
+
+    class S1,S2,S3 source
+    class STG1,STG2,STG3 staging
+    class F1,D1,D2,V1,V2 dw
+    class API1,API2,API3 api
+    class C1,C2,C3 cache
+    class M1,M2,M3 metrics

@@ -1,0 +1,18 @@
+[
+  {
+    "order_id": "ORD-100",
+    "order_line_nbr": 1,
+    "customer_nk": "CUST-001",
+    "email": "alice@example.com",
+    "sku": "SKU-001",
+    "product_name": "Sample Product",
+    "brand": "Acme",
+    "category": "Electronics",
+    "quantity": 2,
+    "unit_price": 199.99,
+    "discount_amount": 0,
+    "currency_code": "EUR",
+    "channel_code": "web",
+    "transaction_ts": "2024-02-01T10:00:00Z"
+  }
+]

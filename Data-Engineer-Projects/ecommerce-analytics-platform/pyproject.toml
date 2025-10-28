@@ -1,0 +1,137 @@
+[tool.poetry]
+name = "ecom-analytics"
+version = "0.1.0"
+description = "E-commerce analytics platform scaffold for batch and streaming analytics."
+authors = ["Ecom Analytics Team <devnull@example.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [
+    { include = "backend" },
+    { include = "etl" },
+    { include = "ml" },
+    { include = "infra" }
+]
+
+[tool.poetry.extras]
+docs = [
+    "mkdocs",
+    "mkdocs-material",
+    "pymdown-extensions",
+    "mkdocstrings-python"
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.110.0"
+uvicorn = { extras = ["standard"], version = "^0.30.0" }
+pydantic = ">=2.0.0,<3.0.0"
+pydantic-settings = "^2.2.1"
+sqlalchemy = "^2.0.29"
+sqlmodel = "^0.0.18"
+psycopg = { extras = ["binary"], version = "^3.1.19" }
+redis = "^5.0.4"
+structlog = "^24.1.0"
+python-dotenv = "^1.0.1"
+prometheus-client = "^0.20.0"
+pandas = "^2.2.2"
+numpy = "^1.26.4"
+scipy = "^1.13.1"
+implicit = "^0.7.0"
+alembic = "^1.17.0"
+prometheus-fastapi-instrumentator = "^7.1.0"
+pyjwt = "^2.9.0"
+bcrypt = "^4.2.0"
+aiokafka = "^0.10.0"
+orjson = "^3.10.0"
+ciso8601 = "^2.3.1"
+httpx = "^0.27.0"
+pytest = "^8.3.2"
+pytest-cov = "^5.0.0"
+ruff = "^0.5.6"
+black = "^24.2.0"
+mypy = "^1.9.0"
+kafka-python = "^2.2.15"
+psycopg2-binary = "^2.9.11"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+pytest-cov = "^5.0.0"
+pytest-asyncio = "^0.23.7"
+mypy = "^1.10.0"
+ruff = "^0.5.6"
+black = "^24.4.2"
+types-redis = "^4.6.0.20240425"
+types-python-dateutil = "^2.9.0.20240316"
+pip-audit = "^2.7.3"
+httpx = "^0.27.0"
+types-PyJWT = "^1.7.0"
+bandit = "^1.7.8"
+detect-secrets = "^1.5.0"
+dotenv-linter = "^0.5.0"
+
+[tool.poetry.scripts]
+dev = "backend.app.main:run_dev_server"
+test = "backend.tests.runner:run_tests"
+ci = "backend.tests.runner:run_ci"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.ruff_cache
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".venv",
+    "build",
+    "dist",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4", "SIM", "TID", "ERA"]
+ignore = ["E501"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+disallow_any_generics = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+strict_equality = true
+exclude = [
+    "infra/alembic/versions",
+]
+
+[[tool.mypy.overrides]]
+module = ["alembic", "alembic.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "--strict-markers --disable-warnings"
+testpaths = ["backend/tests"]
+
+[build-system]
+requires = ["poetry-core>=1.7.0"]
+build-backend = "poetry.core.masonry.api"

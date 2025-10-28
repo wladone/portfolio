@@ -1,0 +1,18 @@
+[
+  {
+    "order_id": "ORD-1000",
+    "order_line_nbr": 1,
+    "customer_nk": "cust-1000",
+    "email": "user@example.com",
+    "sku": "SKU-1000",
+    "product_name": "Widget Deluxe",
+    "brand": "BrandX",
+    "category": "Electronics",
+    "quantity": 1,
+    "unit_price": 99.99,
+    "discount_amount": 0,
+    "currency_code": "USD",
+    "channel_code": "web",
+    "transaction_ts": "2025-01-05T12:00:00Z"
+  }
+]

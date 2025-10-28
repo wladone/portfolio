@@ -1,0 +1,10 @@
+[
+  {
+    "customer_nk": "cust-1000",
+    "email": "user@example.com",
+    "first_name": "Test",
+    "last_name": "User",
+    "phone": "+1000000000",
+    "country_code": "us"
+  }
+]

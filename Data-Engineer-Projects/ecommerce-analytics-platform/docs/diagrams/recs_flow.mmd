@@ -1,0 +1,31 @@
+```mermaid
+flowchart LR
+    subgraph Offline["Offline Training"]
+        FACT[dw.fact_sales]
+        AFF[dw.v_product_affinity]
+        ALS[ALS Trainer]
+        ART[(Model Artifacts\n.npz/.json\nml/artifacts/)]
+    end
+
+    subgraph Serving
+        CFG[ML Settings]
+        API[Recommendations Service]
+        CACHE[Redis Cache]
+    end
+
+    FACT --> ALS
+    AFF --> ALS
+    ALS --> ART
+    ART --> API
+    CFG --> API
+    API --> CACHE
+    CACHE -->|Cache Hit| API
+    API -->|Fallback| POP[Popularity Model]
+    POP --> API
+
+    subgraph API["API Endpoints"]
+        RECS[Prompt 7\n/recommendations]
+    end
+
+    API --> RECS
+```

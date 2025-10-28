@@ -1,0 +1,72 @@
+site_name: E-commerce Analytics Platform
+site_description: Documentation for the E-commerce Analytics Platform
+theme:
+  name: material
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - search.highlight
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Runbook:
+    - Day 1 Operations: runbook/day1.md
+    - Day 2 Operations: runbook/day2.md
+    - Incident Management: runbook/incidents.md
+    - Playbooks:
+      - Performance Degradation: runbook/playbooks/perf_degradation.md
+      - 5xx Error Spikes: runbook/playbooks/spike_5xx.md
+      - ETL Backlog: runbook/playbooks/etl_backlog.md
+      - Kafka Lag: runbook/playbooks/kafka_lag.md
+      - Redis Outages: runbook/playbooks/redis_outages.md
+      - DB Pool Exhaustion: runbook/playbooks/db_pool_exhaustion.md
+      - Cache Stampede: runbook/playbooks/cache_stampede.md
+    - Postmortem Template: runbook/postmortem_template.md
+  - SRE:
+    - SLIs & SLOs: sre/slis_slos.md
+    - Alerting Rules: sre/alerting_rules.md
+    - Run Queries: sre/run_queries.md
+  - Data:
+    - Governance: data/governance.md
+    - Retention Policy: data/retention_policy.md
+    - Data Lineage: data/lineage.md
+  - Security:
+    - Key Rotation: security/key_rotation.md
+    - Secrets Policy: security/secrets_policy.md
+    - Risk Register: security/risk_register.md
+  - Release:
+    - Versioning: release/versioning.md
+    - Changelog: release/changelog.md
+    - Release Checklist: release/release_checklist.md
+  - Onboarding:
+    - Developer Guide: onboarding/dev.md
+    - Analyst Guide: onboarding/analyst.md
+    - CLI Cheatsheet: onboarding/cli_cheatsheet.md
+  - API:
+    - Quick Start: api/quickstart.md
+    - Postman Collection: api/postman_collection.md
+
+plugins:
+  - search
+  - minify:
+      minify_html: true

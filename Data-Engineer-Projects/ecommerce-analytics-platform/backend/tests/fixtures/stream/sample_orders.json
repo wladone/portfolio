@@ -1,0 +1,50 @@
+[
+  {
+    "order_id": "ORD-1001",
+    "order_line_nbr": 1,
+    "customer_nk": "cust-1001",
+    "email": "user1@example.com",
+    "sku": "SKU-1001",
+    "product_name": "Laptop Pro",
+    "brand": "TechBrand",
+    "category": "Electronics",
+    "quantity": 1,
+    "unit_price": 1299.99,
+    "discount_amount": 50.00,
+    "currency_code": "USD",
+    "channel_code": "web",
+    "transaction_ts": "2025-01-05T12:00:00Z"
+  },
+  {
+    "order_id": "ORD-1001",
+    "order_line_nbr": 2,
+    "customer_nk": "cust-1001",
+    "email": "user1@example.com",
+    "sku": "SKU-1002",
+    "product_name": "Mouse Wireless",
+    "brand": "TechBrand",
+    "category": "Electronics",
+    "quantity": 2,
+    "unit_price": 29.99,
+    "discount_amount": 0,
+    "currency_code": "USD",
+    "channel_code": "web",
+    "transaction_ts": "2025-01-05T12:00:00Z"
+  },
+  {
+    "order_id": "ORD-1002",
+    "order_line_nbr": 1,
+    "customer_nk": "cust-1002",
+    "email": "user2@example.com",
+    "sku": "SKU-1003",
+    "product_name": "Book Python Guide",
+    "brand": "BookPub",
+    "category": "Books",
+    "quantity": 1,
+    "unit_price": 39.99,
+    "discount_amount": 5.00,
+    "currency_code": "USD",
+    "channel_code": "mobile",
+    "transaction_ts": "2025-01-05T13:30:00Z"
+  }
+]

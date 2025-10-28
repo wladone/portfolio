@@ -1,0 +1,267 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ecom_postgres
+    environment:
+      POSTGRES_DB: ecom
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d ecom"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - dev
+      - prod
+    networks:
+      - ecom_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: ecom_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    profiles:
+      - dev
+      - prod
+    networks:
+      - ecom_net
+
+  minio:
+    image: minio/minio:RELEASE.2024-08-03T04-33-23Z
+    container_name: ecom_minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://localhost:9000/minio/health/live || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - dev
+    networks:
+      - ecom_net
+
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    container_name: ecom_redpanda
+    hostname: redpanda
+    command:
+      - redpanda
+      - start
+      - --kafka-addr PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+      - --pandaproxy-addr 0.0.0.0:8082
+      - --advertise-pandaproxy-addr localhost:8082
+      - --overprovisioned
+      - --smp 1
+      - --memory 1G
+      - --reserve-memory 0M
+      - --mode dev-container
+    ports:
+      - "8082:8082"
+      - "9092:9092"
+      - "29092:29092"
+    healthcheck:
+      test: ["CMD", "rpk", "cluster", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - dev
+      - obs
+    networks:
+      - ecom_net
+
+  redpanda-console:
+    image: docker.redpanda.com/redpandadata/console:latest
+    container_name: ecom_redpanda_console
+    environment:
+      KAFKA_BROKERS: redpanda:9092
+    ports:
+      - "8080:8080"
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    profiles:
+      - obs
+    networks:
+      - ecom_net
+
+  streamer:
+    build:
+      context: ..
+      dockerfile: streaming/Dockerfile
+    container_name: ecom_streamer
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+      APP_ENV: ${APP_ENV:-dev}
+      DATABASE_URL: postgresql+psycopg://app:app_password@postgres:5432/ecom
+      REDIS_URL: redis://redis:6379/0
+      KAFKA_BROKERS: redpanda:9092
+    env_file:
+      - ../.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      redpanda:
+        condition: service_healthy
+    command: python -m streaming.orders_worker --kafka --topic orders --group ecom-orders-dev --batch-size 256 --ensure-dim-date
+    profiles:
+      - dev
+    networks:
+      - ecom_net
+
+  api:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    container_name: ecom_api
+    env_file:
+      - ../.env
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+      APP_ENV: ${APP_ENV:-dev}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - dev
+      - prod
+    networks:
+      - ecom_net
+
+  etl:
+    build:
+      context: ..
+      dockerfile: etl/Dockerfile
+    container_name: ecom_etl
+    env_file:
+      - ../.env
+    environment:
+      PYTHONUNBUFFERED: "1"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    volumes:
+      - ../infra/seed/data:/data
+    profiles:
+      - dev
+      - prod
+    networks:
+      - ecom_net
+
+  ml:
+    build:
+      context: ..
+      dockerfile: ml/Dockerfile
+    container_name: ecom_ml
+    env_file:
+      - ../.env
+    environment:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    volumes:
+      - ml_artifacts:/app/ml/artifacts
+    profiles:
+      - dev
+      - prod
+    networks:
+      - ecom_net
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ecom_prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    profiles:
+      - obs
+    networks:
+      - ecom_net
+
+  pushgateway:
+    image: prom/pushgateway:latest
+    container_name: ecom_pushgateway
+    ports:
+      - "9091:9091"
+    profiles:
+      - obs
+    networks:
+      - ecom_net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ecom_grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    profiles:
+      - obs
+    networks:
+      - ecom_net
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+  ml_artifacts:
+  grafana_data:
+
+networks:
+  ecom_net:
+    driver: bridge

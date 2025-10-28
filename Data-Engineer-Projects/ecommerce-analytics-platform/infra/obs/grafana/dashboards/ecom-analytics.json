@@ -1,0 +1,70 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "E-commerce Analytics",
+    "tags": ["ecommerce", "api", "etl"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "API Request Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(requests_total[5m])",
+            "legendFormat": "{{endpoint}} {{method}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "API Request Latency",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(request_latency_seconds_bucket[5m]))",
+            "legendFormat": "95th percentile"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "ETL Job Duration",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "etl_job_duration_seconds",
+            "legendFormat": "{{job_name}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "ETL Rows Processed",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "etl_rows_in",
+            "legendFormat": "{{job_name}} in"
+          },
+          {
+            "expr": "etl_rows_out",
+            "legendFormat": "{{job_name}} out"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+      }
+    ],
+    "time": {"from": "now-1h", "to": "now"},
+    "timepicker": {},
+    "templating": {"list": []},
+    "annotations": {"list": []},
+    "refresh": "5s",
+    "schemaVersion": 27,
+    "version": 0,
+    "links": []
+  }
+}

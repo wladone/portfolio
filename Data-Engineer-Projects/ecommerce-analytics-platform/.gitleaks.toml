@@ -1,0 +1,32 @@
+# Global settings
+[allowlist]
+description = "Global allow list of safe secrets"
+paths = [
+    '''infra/secrets/jwt_keys.example.json$''',
+    '''\.env\.example$''',
+    '''tests/fixtures/.*'''
+]
+
+# Test data markers
+regexes = [
+    '''TEST_SECRET''',
+    '''EXAMPLE_KEY''',
+    '''DEMO_TOKEN'''
+]
+
+[rules]
+    [rules.jwt-tokens]
+    description = "JWT Tokens"
+    regex = '''ey[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*'''
+    allowlist = [
+        '''test_token = "ey'''  # Allow test tokens in tests
+    ]
+
+    [rules.env-vars]
+    description = "Environment Variables with Sensitive Names"
+    regex = '''(?i)(\b(api[_-]?key|auth[_-]?token|client[_-]?secret|password|secret[_-]?key|token)[_-]?[=:]\s*)['"][^'"]+['"]'''
+    allowlist = [
+        '''example''',
+        '''placeholder''',
+        '''changeme'''
+    ]
