@@ -1,0 +1,21 @@
+﻿{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: run_er (ER only)",
+      "type": "python",
+      "request": "launch",
+      "program": "/scripts/run_er.py",
+      "console": "integratedTerminal",
+      "args": []
+    },
+    {
+      "name": "Python: run_er (QC + Report)",
+      "type": "python",
+      "request": "launch",
+      "program": "/scripts/run_er.py",
+      "console": "integratedTerminal",
+      "args": ["--qc", "--report"]
+    }
+  ]
+}

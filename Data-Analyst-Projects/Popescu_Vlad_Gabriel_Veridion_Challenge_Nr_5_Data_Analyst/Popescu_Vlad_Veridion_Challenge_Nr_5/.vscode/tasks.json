@@ -1,0 +1,42 @@
+﻿{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install deps",
+      "type": "shell",
+      "command": "pip install -r requirements.txt",
+      "group": "build",
+      "detail": "Create/refresh the virtual environment packages"
+    },
+    {
+      "label": "Run ER",
+      "type": "shell",
+      "command": "python scripts\\run_er.py",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run QC + Report",
+      "type": "shell",
+      "command": "python scripts\\run_er.py --qc --report",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Tests",
+      "type": "shell",
+      "command": "pytest -q",
+      "group": "test"
+    },
+    {
+      "label": "Lint (ruff)",
+      "type": "shell",
+      "command": "ruff check .",
+      "group": "build"
+    },
+    {
+      "label": "Format (black)",
+      "type": "shell",
+      "command": "black .",
+      "group": "build"
+    }
+  ]
+}
